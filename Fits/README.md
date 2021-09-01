@@ -1,5 +1,6 @@
-# TMDs
+# TMDs Fits
 
-## LHAPDF Instructions
+## Fits to Individual Data Sets
 
-Please refer instructions on this wiki page: https://confluence.its.virginia.edu/pages/viewpage.action?pageId=46553452 
+## Global Fits
+ 
