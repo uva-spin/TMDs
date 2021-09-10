@@ -9,7 +9,9 @@ Please refer instructions on this wiki page: https://confluence.its.virginia.edu
 
 Implement the following commands before submitting the job using 'sbatch'
 
-module load anaconda/2020.11-py3.8
-pip install --user iminuit
-pip install --user tabulate
+* module load anaconda/2020.11-py3.8
+
+* pip install --user iminuit
+
+* pip install --user tabulate
 
