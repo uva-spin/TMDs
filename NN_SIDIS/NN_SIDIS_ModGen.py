@@ -20,9 +20,13 @@ import functions
 Hidden_Layers=2
 Nodes_per_HL=256
 Learning_Rate = 0.0001
-EPOCHS = 10000
+EPOCHS = 5000
 
-#################################################################
+##################### Important ##################################
+####################               ################################
+### Make sure to create a folder called "Models_SIDIS_replicas" ###
+#### in the same directory ########################################
+####################################################################
 
 herm9 = pd.read_csv('./Data/HERMES_p_2009.csv').dropna(axis=0, how='all').dropna(axis=1, how='all')
 herm20 = pd.read_csv('./Data/HERMES_p_2020.csv').dropna(axis=0, how='all').dropna(axis=1, how='all')
@@ -269,7 +273,7 @@ def trainReplicas(X, y, err, numReplicas):
         #sivModel.fit(X, yrep, epochs=50, verbose=2)
         sivModel.fit(X, y, sample_weight=(1/trn_err**2), validation_data=(tst_X, tst_y), epochs=EPOCHS, verbose=0)
         
-        sivModel.save('Models_SIDIS_1000/rep' + str(i) + '.h5', save_format='h5')
+        sivModel.save('Models_SIDIS_replicas/rep' + str(i) + '.h5', save_format='h5')
         
         
 trainReplicas(trn_X, trn_y, trn_err, 1000)
