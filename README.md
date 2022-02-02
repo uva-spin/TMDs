@@ -1,5 +1,21 @@
 # TMDs
 
+## Sivers Function Extraction
+
+In this folder:
+
+*  Minuit (Convensional) fits
+
+* Neural Net fits
+
+* Pseudo data generation files
+
+* Comparison files with earlier work 
+
+are included.
+
+
+
 ## LHAPDF Instructions
 
 Please refer instructions on this wiki page: https://confluence.its.virginia.edu/pages/viewpage.action?pageId=46553452 
