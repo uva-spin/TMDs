@@ -369,7 +369,7 @@ class DY_DataANN(object):
             x2 = sliced['x2']
             QQ = sliced['QM']
             data['Uexpr_x1'] += list(self.eu**2 * (1/x1)*(self.pdf_DY(2, x1, QQ)) * (1/x2)*(self.pdf_DY(-2, x2, QQ)))
-            data['Uexpr_x2'] += list(self.eu**2 * (1/x1)*(self.pdf_DY(2, x2, QQ)) * (1/x2)*(self.pdf_DY(-2, x1, QQ)))
+            data['Uexpr_x2'] += list(self.eu**2 * (1/x2)*(self.pdf_DY(2, x2, QQ)) * (1/x1)*(self.pdf_DY(-2, x1, QQ)))
             data['Ubarexpr_x1'] += list(self.eubar**2 * (1/x1)*(self.pdf_DY(-2, x1, QQ)) * (1/x2)*(self.pdf_DY(2, x2, QQ)))
             data['Ubarexpr_x2'] += list(self.eubar**2 * (1/x2)*(self.pdf_DY(-2, x2, QQ)) * (1/x1)*(self.pdf_DY(2, x1, QQ)))
             data['Dexpr_x1'] += list(self.ed**2 * (1/x1)*(self.pdf_DY(1, x1, QQ)) * (1/x2)*(self.pdf_DY(-1, x2, QQ)))
