@@ -1,0 +1,16 @@
+
+Data
+Models_SIDIS_100
+NN_SIDIS_ModGen.py
+NN_SIDIS_Plots.ipynb
+NN_SIDIS_models_replica_generator.slurm
+__pycache__
+functions.py
+result_4294967294.err
+result_4294967294.out
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+# All requested packages already installed.
+
+Python 3.8.12

@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/home/das5pzq/.local/lib/python3.8/site-packages/pandas/core/internals/construction.py", line 568, in _list_to_arrays
+    columns = _validate_or_indexify_columns(content, columns)
+  File "/home/das5pzq/.local/lib/python3.8/site-packages/pandas/core/internals/construction.py", line 692, in _validate_or_indexify_columns
+    raise AssertionError(
+AssertionError: 6 columns passed, passed data had 27 columns
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "Test_File.py", line 322, in <module>
+    totalfitDataSet(Dat2,m1=M1_t2,Nu=NU_t2,alphau=AlphaU_t2,betau=BetaU_t2,Nubar=NUbar_t2,Nd=ND_t2,alphad=AlphaD_t2,betad=BetaD_t2,Ndbar=NDbar_t2,Ns=NS_t2,alphas=AlphaS_t2,betas=BetaS_t2,Nsbar=NSbar_t2)
+  File "Test_File.py", line 317, in totalfitDataSet
+    df = pd.DataFrame(fittot, columns = ['hadron','y','pht','x','z','Siv'] ,index = ['pi+','pi-','p0','k+','k-'])
+  File "/home/das5pzq/.local/lib/python3.8/site-packages/pandas/core/frame.py", line 570, in __init__
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+  File "/home/das5pzq/.local/lib/python3.8/site-packages/pandas/core/internals/construction.py", line 552, in to_arrays
+    return _list_to_arrays(data, columns, coerce_float=coerce_float, dtype=dtype)
+  File "/home/das5pzq/.local/lib/python3.8/site-packages/pandas/core/internals/construction.py", line 571, in _list_to_arrays
+    raise ValueError(e) from e
+ValueError: 6 columns passed, passed data had 27 columns
