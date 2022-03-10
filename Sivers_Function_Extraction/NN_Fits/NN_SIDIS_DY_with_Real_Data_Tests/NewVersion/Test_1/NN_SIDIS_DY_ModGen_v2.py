@@ -14,15 +14,25 @@ import matplotlib.pyplot as plt
 
 #import Mod_Gen_functions
 
-Hidden_Layers=2
-Nodes_per_HL=20
-Learning_Rate = 0.0001
-EPOCHS = 5
-REPLICAS = 2
-Batch_Size = 6
+Hidden_Layers=3
+Nodes_per_HL=32
+Learning_Rate = 0.01
+EPOCHS = 1000
+REPLICAS = 1
+Batch_Size = 10
 optimizer = tf.keras.optimizers.Adam(Learning_Rate)
 loss_fn = tf.keras.losses.MeanSquaredError()
 
+
+### Here we create models for each quark-flavor (only input is x) ###
+def create_nn_model(name):
+    inp = tf.keras.Input(shape=(1))
+    L1 = tf.keras.layers.Dense(20, activation='relu')(inp)
+    L2 = tf.keras.layers.Dense(20, activation='tanh')(L1)
+    L3 = tf.keras.layers.Dense(20, activation='relu')(L2)
+    nnout = tf.keras.layers.Dense(1, activation='linear')(L3)
+    mod = tf.keras.Model(inp, nnout, name=name)
+    return mod
 
 def chisquare(y, yhat, err):
     return np.sum(((y - yhat)/err)**2)
@@ -101,16 +111,6 @@ class Quotient(tf.keras.layers.Layer):
             raise Exception('must be two tensors of shape (?, 1)')
         return inputs[0]/inputs[1]
 
-
-### Here we create models for each quark-flavor (only input is x) ###
-def create_nn_model(name, hidden_layers=Hidden_Layers, width=Nodes_per_HL, activation='relu'):
-    inp = tf.keras.Input(shape=(1))
-    x = tf.keras.layers.Dense(width, activation=activation)(inp)
-    for i in range(hidden_layers-1):
-        x = tf.keras.layers.Dense(width, activation=activation)(x)
-    nnout = tf.keras.layers.Dense(1)(x)
-    mod = tf.keras.Model(inp, nnout, name=name)
-    return mod
 
 
 def createModel_DY():
@@ -479,13 +479,13 @@ X2, y2, sample_weights2, X2Val, y2Val, sample_weights2Val, loss_fn, optimizer, b
     Lowest_Val_Loss = np.Inf
     Num_since_LowestVal = 0
     #for epoch in range(epchs):
-    epoch = 0
-    while True:
-        
+    #epoch = 0
+    for ep in range(epchs):
+
         if Num_since_LowestVal > 5:
             break
 
-        print("\nStart of epoch %d" % (epoch,))
+        print("\nStart of epoch %d" % (ep,))
 
         # Iterate over the batches of the dataset.
         #for step, (x_batch_train, y_batch_train, sample_weights_batch) in enumerate(yield_batch(X,y,sample_weights,batch_size)):
@@ -511,8 +511,8 @@ X2, y2, sample_weights2, X2Val, y2Val, sample_weights2Val, loss_fn, optimizer, b
                 # to its inputs are going to be recorded
                 # on the GradientTape.
 
-                model.compile(optimizer=optimizer,loss=loss_fn)
-                model.fit(x_batch, y_batch, sample_weight=sample_weights_batch, epochs=epchs, verbose=2)
+                #model.compile(optimizer=optimizer,loss=loss_fn)
+                #model.fit(x_batch, y_batch, sample_weight=sample_weights_batch, epochs=epchs, verbose=0)
                 y_hat = model(x_batch, training=True)  # Logits for this minibatch
 
                 # Compute the loss value for this minibatch.
@@ -524,6 +524,9 @@ X2, y2, sample_weights2, X2Val, y2Val, sample_weights2Val, loss_fn, optimizer, b
 
             # Use the gradient tape to automatically retrieve
             # the gradients of the trainable variables with respect to the loss.
+
+            print("Trainint loss at s %d: %.4f" % (ep, float(loss_value)))
+
             grads = tape.gradient(loss_value, model.trainable_weights)
 
             # Run one step of gradient descent by updating
@@ -551,12 +554,12 @@ X2, y2, sample_weights2, X2Val, y2Val, sample_weights2Val, loss_fn, optimizer, b
                 
 
             # Log every 200 batches.
-            if step % 200 == 0:
-                print(
-                    "Training loss (for one batch) at step %d: %.4f"
-                    % (step, float(loss_value))
-                )
-                print("Seen so far: %s samples" % ((step + 1) * batch_size))
+            # if step % 200 == 0:
+            #     print(
+            #         "Training loss (for one batch) at step %d: %.4f"
+            #         % (step, float(loss_value))
+            #     )
+            #     print("Seen so far: %s samples" % ((step + 1) * batch_size))
 
         # Compute the validation loss value for this minibatch.
         SIDIS_y_hat_Val = model1(X1Val, training=False)
@@ -568,15 +571,17 @@ X2, y2, sample_weights2, X2Val, y2Val, sample_weights2Val, loss_fn, optimizer, b
 
         Total_Validation = (len(y1Val)*SIDIS_Validation_loss + len(y2Val)*DY_Validation_loss)/(len(y1Val)+len(y2Val))
 
-        Num_since_LowestVal += 1
 
         if (Total_Validation < Lowest_Val_Loss):
             Lowest_Val_Loss = Total_Validation
             model.save('SIDISmodels/rep' +str(replicaID) + '.h5', save_format='h5')
             model.save('DYmodels/rep' +str(replicaID) + '.h5', save_format='h5')
             Num_since_LowestVal = 0
+        else:
+            Num_since_LowestVal += 1
 
-        epoch += 1     
+        #epoch += 1  
+        print("Validation loss at epoch %d: %.4f" % (ep, float(Total_Validation)))   
 
 
 
@@ -631,7 +636,8 @@ if __name__=='__main__': ## double underscore means dundered
     comp15_DY = pd.read_csv('Data/COMPASS_p_DY_2017.csv').dropna(axis=0, how='all').dropna(axis=1, how='all')
 
     #df_SIDIS = pd.concat([herm9_SIDIS, herm20_SIDIS, comp9_SIDIS, comp15_SIDIS])
-    df_SIDIS = pd.concat([herm20_SIDIS, comp9_SIDIS, comp15_SIDIS])
+    #df_SIDIS = pd.concat([herm20_SIDIS, comp9_SIDIS, comp15_SIDIS])
+    df_SIDIS = pd.concat([comp9_SIDIS, comp15_SIDIS])
 
     df_DY= pd.concat([comp15_DY])
 
