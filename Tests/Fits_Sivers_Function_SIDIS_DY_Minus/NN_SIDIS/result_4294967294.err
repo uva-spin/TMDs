@@ -1,0 +1,25 @@
+2021-11-19 09:05:36.386239: E tensorflow/stream_executor/cuda/cuda_driver.cc:271] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2021-11-19 09:05:36.387123: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (udc-ba26-32c0): /proc/driver/nvidia/version does not exist
+2021-11-19 09:05:36.388009: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Traceback (most recent call last):
+  File "NN_SIDIS_ModGen.py", line 135, in <module>
+    sivModel = createModel()
+  File "NN_SIDIS_ModGen.py", line 124, in createModel
+    quo = Quotient()([numerator, denominator])
+  File "/home/das5pzq/.conda/envs/tf-2.7/lib/python3.8/site-packages/keras/utils/traceback_utils.py", line 67, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "/home/das5pzq/.conda/envs/tf-2.7/lib/python3.8/site-packages/tensorflow/python/autograph/impl/api.py", line 699, in wrapper
+    raise e.ag_error_metadata.to_exception(e)
+Exception: Exception encountered when calling layer "quotient" (type Quotient).
+
+in user code:
+
+    File "NN_SIDIS_ModGen.py", line 87, in call  *
+        raise Exception('must be two tensors of shape (?, 1)')
+
+    Exception: must be two tensors of shape (?, 1)
+
+
+Call arguments received:
+  • inputs=['tf.Tensor(shape=(None, 6, 6), dtype=float32)', 'tf.Tensor(shape=(None, 1, 1), dtype=float32)']

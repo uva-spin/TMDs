@@ -1,0 +1,15 @@
+  pos  name      value    error  error-    error+    limit-    limit+    fixed
+-----  ------  -------  -------  --------  --------  --------  --------  -------
+    0  m1        5.8      0.7
+    1  Nu        0.67     0.07
+    2  alphau    2.62     0.11
+    3  betau    14.5      0.6
+    4  Nubar    -0.092    0.018
+    5  Nd       -1.15     0.14
+    6  alphad    1.31     0.34
+    7  betad     5.1      1.9
+    8  Ndbar     0.03     0.13
+    9  Ns       11.3      0.9
+   10  alphas    0.88     0.06
+   11  betas     0.48     0.08
+   12  Nsbar     0.2      0.4

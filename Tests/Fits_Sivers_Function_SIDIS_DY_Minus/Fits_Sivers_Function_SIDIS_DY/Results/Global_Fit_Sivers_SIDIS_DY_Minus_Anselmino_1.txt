@@ -1,0 +1,46 @@
+<ValueView m1=1.303 Nu=0.1695 alphau=0.6455 betau=3.122 Nubar=0.007605 Nd=-0.4345 alphad=1.777 betad=7.788 Ndbar=-0.142 Ns=0.5626 alphas=6.887e-05 betas=1.1328255210339943e-10 Nsbar=-0.1221>
+<ErrorView m1=nan Nu=nan alphau=nan betau=nan Nubar=nan Nd=nan alphad=nan betad=nan Ndbar=nan Ns=nan alphas=nan betas=nan Nsbar=nan>
+┌───┬────────┬───────────┬───────────┬────────────┬────────────┬─────────┬─────────┬───────┐
+│   │ Name   │   Value   │ Hesse Err │ Minos Err- │ Minos Err+ │ Limit-  │ Limit+  │ Fixed │
+├───┼────────┼───────────┼───────────┼────────────┼────────────┼─────────┼─────────┼───────┤
+│ 0 │ m1     │   1.303   │    nan    │            │            │         │         │       │
+│ 1 │ Nu     │ 1.695e-1  │    nan    │            │            │         │         │       │
+│ 2 │ alphau │ 6.455e-1  │    nan    │            │            │         │         │       │
+│ 3 │ betau  │   3.122   │    nan    │            │            │         │         │       │
+│ 4 │ Nubar  │ 7.605e-3  │    nan    │            │            │         │         │       │
+│ 5 │ Nd     │ -4.345e-1 │    nan    │            │            │         │         │       │
+│ 6 │ alphad │   1.777   │    nan    │            │            │         │         │       │
+│ 7 │ betad  │   7.788   │    nan    │            │            │         │         │       │
+│ 8 │ Ndbar  │ -1.42e-1  │    nan    │            │            │         │         │       │
+│ 9 │ Ns     │ 5.626e-1  │    nan    │            │            │         │         │       │
+│ 10│ alphas │ 6.887e-5  │    nan    │            │            │         │         │       │
+│ 11│ betas  │1.1328e-10 │    nan    │            │            │         │         │       │
+│ 12│ Nsbar  │ -1.221e-1 │    nan    │            │            │         │         │       │
+└───┴────────┴───────────┴───────────┴────────────┴────────────┴─────────┴─────────┴───────┘
+┌────────┬────────────────────────────────────────────────────────────────────────────────────────────┐
+│        │     m1     Nu alphau  betau  Nubar     Nd alphad  betad  Ndbar     Ns alphas  betas  Nsbar │
+├────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│     m1 │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│     Nu │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│ alphau │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│  betau │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│  Nubar │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│     Nd │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│ alphad │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│  betad │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│  Ndbar │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│     Ns │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│ alphas │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│  betas │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+│  Nsbar │    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan    nan │
+└────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 3266                       │              Nfcn = 281              │
+│ EDM = nan (Goal: 0.0002)         │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│  Covariance   │     Hesse ok     │APPROXIMATE│NOT pos. def.│   FORCED   │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
