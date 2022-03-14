@@ -14,16 +14,16 @@ import matplotlib.pyplot as plt
 
 #import Mod_Gen_functions
 
-PseudoData_Set = "FromCalcGrids/Pseudo_Data/Set_1"
+#PseudoData_Set = "FromCalcGrids/Pseudo_Data/Set_1"
 
 ## DY ###
-DY_Dat1='../../Pseudo_Data/'+str(PseudoData_Set)+'/Pseudo_DY_COMPASS2017.csv'
+DY_Dat1='Data/COMPASS_p_DY_2017.csv'
 
 ## SIDIS ###
-SIDIS_Dat1='../../Pseudo_Data/'+str(PseudoData_Set)+'/Pseudo_SIDIS_HERMES2009.csv'
-SIDIS_Dat2='../../Pseudo_Data/'+str(PseudoData_Set)+'/Pseudo_SIDIS_HERMES2020.csv'
-SIDIS_Dat3='../../Pseudo_Data/'+str(PseudoData_Set)+'/Pseudo_SIDIS_COMPASS2009.csv'
-SIDIS_Dat4='../../Pseudo_Data/'+str(PseudoData_Set)+'/Pseudo_SIDIS_COMPASS2015.csv'
+SIDIS_Dat1='Data/HERMES_p_2009.csv'
+SIDIS_Dat2='Data/HERMES_p_2020.csv'
+SIDIS_Dat3='Data/COMPASS_d_2009.csv'
+SIDIS_Dat4='Data/COMPASS_p_2015.csv'
 
 Hidden_Layers=2
 Nodes_per_HL=256
