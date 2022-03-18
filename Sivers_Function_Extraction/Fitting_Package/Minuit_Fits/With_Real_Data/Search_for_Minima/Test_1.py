@@ -29,17 +29,17 @@ par_name_array=('m1','Nu','alphau','betau','Nubar','Nd','alphad','betad','Ndbar'
 ### Initial values ######
 
 m1v = 3.73
+Nuv=0.435
 auv=2.45
 buv=13
-adv=2.08
-bdv=7.8
-asv=0.421
-bsv=0.052
-Nuv=0.435
 Nubv=-0.1202
 Ndv=-0.89
+adv=2.08
+bdv=7.8
 Ndbv=-0.10
 Nsv=5.76
+asv=0.421
+bsv=0.052
 Nsbv=0.17
 
 
