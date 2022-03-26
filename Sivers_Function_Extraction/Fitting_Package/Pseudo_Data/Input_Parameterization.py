@@ -30,23 +30,23 @@ def NNqbar(x,Nqbar):
     return tempNNqbar
 
 #OutputFolder='Set_1'
-OutputFolder='Set_1'
+OutputFolder='Set_2'
 
 
 ### Pseudodata-Generation ###
-m1v = 6.31
-Nuv = 0.75
-auv = 2.68
-buv = 14.71
-Nubv = -0.094
-Ndv = -1.32
-adv = 1.39
-bdv = 5.21
-Ndbv = -0.01
-Nsv = 12.08
-asv = 0.91
-bsv = 0.54
-Nsbv = 0.25
+# m1v = 6.31
+# Nuv = 0.75
+# auv = 2.68
+# buv = 14.71
+# Nubv = -0.094
+# Ndv = -1.32
+# adv = 1.39
+# bdv = 5.21
+# Ndbv = -0.01
+# Nsv = 12.08
+# asv = 0.91
+# bsv = 0.54
+# Nsbv = 0.25
 
 # m1v = 40.40
 # Nuv = 4.36
@@ -61,6 +61,21 @@ Nsbv = 0.25
 # asv = 1.38
 # bsv = 5.35
 # Nsbv = 0.06
+
+
+m1v = 25.07
+Nuv = 2.83
+auv = 2.40
+buv = 14.29
+Nubv = -0.16
+Ndv = -4.72
+adv = 1.30
+bdv = 5.29
+Ndbv = -0.93
+Nsv = 14.76
+asv = 3.07
+bsv = 20.62
+Nsbv = -1.82
 
 ### Data set arrays
 
