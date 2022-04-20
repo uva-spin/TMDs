@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+import shutil
 
 ########## Here we need to define the paths ##########
 Org_Data_path = 'Pseudo-Data/Set_3/'
@@ -13,7 +14,10 @@ COMPASS2015 = 'Pseudo_SIDIS_COMPASS2015.csv'
 Number_of_Replicas = 100
 
 Replica_Output_Folder='Set_3_Replicas'
-os.mkdir(Generic_path + Replica_Output_Folder)
+#os.mkdir(Generic_path + Replica_Output_Folder)
+if os.path.exists(Replica_Output_Folder):
+    shutil.rmtree(Replica_Output_Folder)
+os.makedirs(Replica_Output_Folder)
 
 herm09 = pd.read_csv(Org_Data_path + HERMES2009).dropna(axis=0, how='all').dropna(axis=1, how='all')
 herm20 = pd.read_csv(Org_Data_path + HERMES2020).dropna(axis=0, how='all').dropna(axis=1, how='all')
