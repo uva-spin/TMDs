@@ -7,6 +7,10 @@ import glob
 import os
 import copy
 import natsort
+import os
+import shutil
+
+
 
 data_path = 'Models_SIDIS_Set_3'
 folders_array=os.listdir(data_path)
@@ -18,7 +22,10 @@ data_folders_array=os.listdir(data_replica_path)
 data_folders_array = natsort.natsorted(data_folders_array)
 
 Results_Plots_Path = 'Asym_Plots'
-os.mkdir(Results_Plots_Path)
+#os.mkdir(Results_Plots_Path)
+if os.path.exists(Results_Plots_Path):
+    shutil.rmtree(Results_Plots_Path)
+os.makedirs(Results_Plots_Path)
 
 
 class A0(tf.keras.layers.Layer):
@@ -229,13 +236,14 @@ def PlotResults(file_num):
     Th = np.array(temp_result["Siv"])
     err = np.array(temp_result["tot_err"])
     fig = plt.figure(file_num, figsize=(100,10))
-    plt.plot(xxy,Fit,'.',color = 'red')
-    plt.errorbar(xx,Th,err,fmt='o',color = 'blue') 
+    plt.plot(xxy,Fit,'.',color = 'red',label='ANN')
+    plt.errorbar(xx,Th,err,fmt='o',color = 'blue', label='Replica') 
     plt.xlabel('Data Point #', fontsize=20)
     plt.ylabel('Sivers Asymmetry', fontsize=20)
     plt.title('Plot for replica #'+str(file_num),fontsize=20)
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
+    plt.legend(loc=4,fontsize=20,handlelength=3)
     fig.savefig(Results_Plots_Path + '/test_' + str(file_num)+'.pdf')
 
 for i in range(5):
