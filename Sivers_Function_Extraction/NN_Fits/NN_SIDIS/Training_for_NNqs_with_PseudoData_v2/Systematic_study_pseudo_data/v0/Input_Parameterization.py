@@ -68,11 +68,11 @@ Nsbv = -0.05
 asbv = 0.5
 bsbv = 0.1
 
-par_name_array=('m1','Nu','alphau','betau','Nubar','alphaub','betaub','Nd','alphad','betad','Ndbar','alphadb','betadb','Ns','alphas','betas','Nsbar','alphasb','betasb')
-temp_df=pd.DataFrame({'parameter':[],'value':[]})
-temp_df['parameter']=par_name_array
-temp_df['value']=np.array([m1v,Nuv,auv,buv,Nubv,aubv,bubv,Ndv,adv,bdv,Ndbv,adbv,bdbv,Nsv,asv,bsv,Nsbv,asbv,bsbv])
-temp_df.to_csv('parameters.csv')
+# par_name_array=('m1','Nu','alphau','betau','Nubar','alphaub','betaub','Nd','alphad','betad','Ndbar','alphadb','betadb','Ns','alphas','betas','Nsbar','alphasb','betasb')
+# temp_df=pd.DataFrame({'parameter':[],'value':[]})
+# temp_df['parameter']=par_name_array
+# temp_df['value']=np.array([m1v,Nuv,auv,buv,Nubv,aubv,bubv,Ndv,adv,bdv,Ndbv,adbv,bdbv,Nsv,asv,bsv,Nsbv,asbv,bsbv])
+# temp_df.to_csv('parameters.csv')
 
 # m1v = 1
 

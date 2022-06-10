@@ -42,37 +42,63 @@ def NNanti(x,Nq,aq,bq):
 
 
 
-m1v = np.random.normal(1,0.3)
+# m1v = np.random.normal(1,0.3)
 
-Nuv = np.random.normal(2.5,0.5)
-auv = np.random.normal(2.0,0.2)
-buv = np.random.normal(0.05,0.03)
+# Nuv = np.random.normal(2.5,0.5)
+# auv = np.random.normal(2.0,0.2)
+# buv = np.random.normal(0.05,0.03)
 
-Nubv = np.random.normal(2.1,0.5)
-aubv = np.random.normal(2.0,0.2)
-bubv = np.random.normal(0.05,0.03)
+# Nubv = np.random.normal(2.1,0.5)
+# aubv = np.random.normal(2.0,0.2)
+# bubv = np.random.normal(0.05,0.03)
 
-Ndv = np.random.normal(2.5,0.5)
-adv = np.random.normal(2.0,0.2)
-bdv = np.random.normal(0.05,0.03)
+# Ndv = np.random.normal(2.5,0.5)
+# adv = np.random.normal(2.0,0.2)
+# bdv = np.random.normal(0.05,0.03)
 
-Ndbv = np.random.normal(-1.5,0.5)
-adbv = np.random.normal(2.5,0.2)
-bdbv = np.random.normal(0.05,0.03)
+# Ndbv = np.random.normal(-1.5,0.5)
+# adbv = np.random.normal(2.5,0.2)
+# bdbv = np.random.normal(0.05,0.03)
 
-Nsv = np.random.normal(0.2,0.5)
-asv = np.random.normal(1.8,0.2)
-bsv = np.random.normal(0.5,0.03)
+# Nsv = np.random.normal(0.2,0.5)
+# asv = np.random.normal(1.8,0.2)
+# bsv = np.random.normal(0.5,0.03)
 
-Nsbv = np.random.normal(-0.05,0.1)
-asbv = np.random.normal(0.5,0.2)
-bsbv = np.random.normal(0.1,0.05)
+# Nsbv = np.random.normal(-0.05,0.1)
+# asbv = np.random.normal(0.5,0.2)
+# bsbv = np.random.normal(0.1,0.05)
 
-par_name_array=('m1','Nu','alphau','betau','Nubar','alphaub','betaub','Nd','alphad','betad','Ndbar','alphadb','betadb','Ns','alphas','betas','Nsbar','alphasb','betasb')
-temp_df=pd.DataFrame({'parameter':[],'value':[]})
-temp_df['parameter']=par_name_array
-temp_df['value']=np.array([m1v,Nuv,auv,buv,Nubv,aubv,bubv,Ndv,adv,bdv,Ndbv,adbv,bdbv,Nsv,asv,bsv,Nsbv,asbv,bsbv])
-temp_df.to_csv('parameters.csv')
+m1v = 1.00316673307616
+
+Nuv = 1.49446270438738
+auv = 1.98103771230181
+buv = 0.127916440563156
+
+Nubv = 2.37603080110487
+aubv = 1.75168710689433
+bubv = 0.062408936933261
+
+Ndv = 2.7387230469617
+adv = 1.90966768227514
+bdv = 0.034628504775884
+
+Ndbv = -1.93421677905926
+adbv = 2.2857733434424
+bdbv = 0.03086718447667
+
+Nsv = -0.495919098099663
+asv = 1.76388117957333
+bsv = 0.495928514574857
+
+Nsbv = 0.11016391953608
+asbv = 0.460801777550646
+bsbv = 0.120299701573669
+
+# par_name_array=('m1','Nu','alphau','betau','Nubar','alphaub','betaub','Nd','alphad','betad','Ndbar','alphadb','betadb','Ns','alphas','betas','Nsbar','alphasb','betasb')
+# temp_df=pd.DataFrame({'parameter':[],'value':[]})
+# temp_df['parameter']=par_name_array
+# temp_df['value']=np.array([m1v,Nuv,auv,buv,Nubv,aubv,bubv,Ndv,adv,bdv,Ndbv,adbv,bdbv,Nsv,asv,bsv,Nsbv,asbv,bsbv])
+# temp_df.to_csv('parameters.csv')
 
 # m1v = 1
 
