@@ -5,76 +5,125 @@ from Input_Parameterization import *
 from Sivers_SIDIS_Definitions import *
 
 
-import copy
+# import copy
 
 
-def chi2(y, yhat, err):
-    return np.sum(((y-yhat)/err)**2)
+# def chi2(y, yhat, err):
+#     return np.sum(((y-yhat)/err)**2)
 
-def Create_SIDIS_P_Data(datafile, m1, Nu, au, bu, Nub, Nd, ad, bd, Ndb):
-    tempdf=pd.read_csv(datafile)
-    temphad=np.array(tempdf['hadron'],dtype=object)
-    tempQ2=np.array(tempdf['Q2'],dtype=object)
-    tempX=np.array(tempdf['x'],dtype=object)
-    tempY=np.array(tempdf['y'],dtype=object)
-    tempZ=np.array(tempdf['z'],dtype=object)
-    tempPHT=np.array(tempdf['phT'],dtype=object)
-    #tempSivData=np.array(tempdf['Siv'],dtype=object)
-    tempSivErr=np.array(tempdf['tot_err'],dtype=object)
-    tempDEP=np.array(tempdf['1D_dependence'],dtype=object)
-    data_dictionary={"hadron":[],"Q2":[],"x":[],"y":[],"z":[],"phT":[],"Siv":[],"tot_err":[],"1D_dependence":[]}
-    data_dictionary["hadron"]=temphad
-    data_dictionary["Q2"]=tempQ2
-    data_dictionary["x"]=tempX
-    data_dictionary["y"]=tempY
-    data_dictionary["z"]=tempZ
-    data_dictionary["phT"]=tempPHT
-    data_dictionary["tot_err"]=tempSivErr
-    data_dictionary["1D_dependence"]=tempDEP
-    PiP=copy.deepcopy(data_dictionary)
-    PiM=copy.deepcopy(data_dictionary)
-    Pi0=copy.deepcopy(data_dictionary)
-    KP=copy.deepcopy(data_dictionary)
-    KM=copy.deepcopy(data_dictionary)
-    SivHad=functions_develop.Sivers_Hadron()
-    ############################################
-    temp_Siv=[]
-    temp_Siv_Org_Data=[]
-    for i in range(len(temphad)):
-        temp=np.array([[data_dictionary["x"][i],data_dictionary["z"][i],
-                        data_dictionary["phT"][i],data_dictionary["Q2"][i]]])
-        temp_had=data_dictionary["hadron"][i]
-        temp_Siv.append(SivHad.sivers(temp_had,temp, m1, Nu, au, bu, Nub, Nd, ad, bd, Ndb)[0])
-        tempdf_had_siv = tempdf["Siv"][i]
-        temp_Siv_Org_Data.append(tempdf_had_siv)
-    ############################################
-    data_dictionary["Siv"]=np.array(temp_Siv)
-    data_dictionary["Siv_Data"]=np.array(temp_Siv_Org_Data)
-    NdataPoints = len(data_dictionary["Siv"])
-    #print(NdataPoints)
-    Tempchi2 = chi2(data_dictionary["Siv"],data_dictionary["Siv_Data"],data_dictionary["tot_err"])
-    #print(Tempchi2)
-    return pd.DataFrame(data_dictionary),Tempchi2, NdataPoints
+# def Create_SIDIS_P_Data(datafile, m1, Nu, au, bu, Nub, Nd, ad, bd, Ndb):
+#     tempdf=pd.read_csv(datafile)
+#     temphad=np.array(tempdf['hadron'],dtype=object)
+#     tempQ2=np.array(tempdf['Q2'],dtype=object)
+#     tempX=np.array(tempdf['x'],dtype=object)
+#     tempY=np.array(tempdf['y'],dtype=object)
+#     tempZ=np.array(tempdf['z'],dtype=object)
+#     tempPHT=np.array(tempdf['phT'],dtype=object)
+#     #tempSivData=np.array(tempdf['Siv'],dtype=object)
+#     tempSivErr=np.array(tempdf['tot_err'],dtype=object)
+#     tempDEP=np.array(tempdf['1D_dependence'],dtype=object)
+#     data_dictionary={"hadron":[],"Q2":[],"x":[],"y":[],"z":[],"phT":[],"Siv":[],"tot_err":[],"1D_dependence":[]}
+#     data_dictionary["hadron"]=temphad
+#     data_dictionary["Q2"]=tempQ2
+#     data_dictionary["x"]=tempX
+#     data_dictionary["y"]=tempY
+#     data_dictionary["z"]=tempZ
+#     data_dictionary["phT"]=tempPHT
+#     data_dictionary["tot_err"]=tempSivErr
+#     data_dictionary["1D_dependence"]=tempDEP
+#     PiP=copy.deepcopy(data_dictionary)
+#     PiM=copy.deepcopy(data_dictionary)
+#     Pi0=copy.deepcopy(data_dictionary)
+#     KP=copy.deepcopy(data_dictionary)
+#     KM=copy.deepcopy(data_dictionary)
+#     SivHad=functions_develop.Sivers_Hadron()
+#     ############################################
+#     temp_Siv=[]
+#     temp_Siv_Org_Data=[]
+#     for i in range(len(temphad)):
+#         temp=np.array([[data_dictionary["x"][i],data_dictionary["z"][i],
+#                         data_dictionary["phT"][i],data_dictionary["Q2"][i]]])
+#         temp_had=data_dictionary["hadron"][i]
+#         temp_Siv.append(SivHad.sivers(temp_had,temp, m1, Nu, au, bu, Nub, Nd, ad, bd, Ndb)[0])
+#         tempdf_had_siv = tempdf["Siv"][i]
+#         temp_Siv_Org_Data.append(tempdf_had_siv)
+#     ############################################
+#     data_dictionary["Siv"]=np.array(temp_Siv)
+#     data_dictionary["Siv_Data"]=np.array(temp_Siv_Org_Data)
+#     NdataPoints = len(data_dictionary["Siv"])
+#     #print(NdataPoints)
+#     Tempchi2 = chi2(data_dictionary["Siv"],data_dictionary["Siv_Data"],data_dictionary["tot_err"])
+#     #print(Tempchi2)
+#     return pd.DataFrame(data_dictionary),Tempchi2, NdataPoints
 
-#test1 = Create_SIDIS_P_Data(SIDIS_DataFilesArray[0],*test_pars)
-#print(test1)
+# #test1 = Create_SIDIS_P_Data(SIDIS_DataFilesArray[0],*test_pars)
+# #print(test1)
 
-def param_samples_new(datafilesarray,pars, pars_err,Nsamples):
-    data_sets_dfs = []
-    for j in range(len(datafilesarray)):
-        tempdf=pd.read_csv(datafilesarray[j])
-        data_sets_dfs.append(tempdf)
-    #print(data_sets_dfs[0])
+# def param_samples_new(datafilesarray,pars, pars_err,Nsamples):
+#     data_sets_dfs = []
+#     for j in range(len(datafilesarray)):
+#         tempdf=pd.read_csv(datafilesarray[j])
+#         data_dictionary={"hadron":[],"Q2":[],"x":[],"y":[],"z":[],"phT":[],"Siv":[],"tot_err":[],"1D_dependence":[]}
+#         temphad=np.array(tempdf['hadron'],dtype=object)
+#         tempQ2=np.array(tempdf['Q2'],dtype=object)
+#         tempX=np.array(tempdf['x'],dtype=object)
+#         tempY=np.array(tempdf['y'],dtype=object)
+#         tempZ=np.array(tempdf['z'],dtype=object)
+#         tempPHT=np.array(tempdf['phT'],dtype=object)
+#         #tempSivData=np.array(tempdf['Siv'],dtype=object)
+#         tempSivErr=np.array(tempdf['tot_err'],dtype=object)
+#         tempDEP=np.array(tempdf['1D_dependence'],dtype=object)
+#         data_sets_dfs.append(tempdf)
+#         TEMPDF = pd.DataFrame(data_dictionary)
+#     #print(data_sets_dfs[0])
+#     #totalfitDataSet(datfile,**parms)
+
+test_pars=([3.87,0.475,2.41,15,-0.032,-1.25,1.5,7,-0.05])
+test_errs=([0.31,0.03,0.16,1.4,0.017,0.19,0.4,2.6,0.11])
+
+def param_samples_new(datafilesarray, pars, pars_err,Nsamples):
     par_sample = []
-    Org_chi2 = []
-    temp_ch2s = []
-    tot_chi2_diff = []
-    temp_npoints = []
+    chi2_array = []
+    parm_dictionary={"m1":[],"Nu":[],"au":[],"bu":[],"Nub":[],"Nd":[],"ad":[],"bd":[],"Ndb":[]}
+    m1a = []
+    Nua = []
+    aua = []
+    bua = []
+    Nuba = []
+    Nda = []
+    ada = []
+    bda = []
+    Ndba = []
     for i in range(0,Nsamples):
         temp_pars = np.random.normal(pars, pars_err)
         #print(temp_pars)
-        temp_tot_chi2_org = SIDIStotalchi2Minuit(*temp_pars)
-        print(temp_tot_chi2_org)
+        temp_chi2_central = SIDIStotalchi2Minuit(*pars)
+        temp_chi2_dist = SIDIStotalchi2Minuit(*temp_pars)
+        temp_chi2_diff = np.abs(temp_chi2_central - temp_chi2_dist)
+        if (temp_chi2_diff <= 300):
+            m1a.append(temp_pars[0])
+            Nua.append(temp_pars[1])
+            aua.append(temp_pars[2])
+            bua.append(temp_pars[3])
+            Nuba.append(temp_pars[4])
+            Nda.append(temp_pars[5])
+            ada.append(temp_pars[6])
+            bda.append(temp_pars[7])
+            Ndba.append(temp_pars[8])
+            #parm_dictionary.append(temp_pars)
+        parm_dictionary["m1"] = np.array(m1a)
+        parm_dictionary["Nu"] = np.array(Nua)
+        parm_dictionary["au"] = np.array(aua)
+        parm_dictionary["bu"] = np.array(bua)
+        parm_dictionary["Nub"] = np.array(Nuba)
+        parm_dictionary["Nd"] = np.array(Nda)
+        parm_dictionary["ad"] = np.array(ada)
+        parm_dictionary["bd"] = np.array(bda)
+        parm_dictionary["Ndb"] = np.array(Ndba)
+    return pd.DataFrame(parm_dictionary)
+            
+
+        #print(temp_chi2_diff) 
         # for j in range(len(datafilesarray)):
         #     #tempdf=pd.read_csv(datafilesarray[j])
         #     temp_calcs_org = Create_SIDIS_P_Data(datafilesarray[j], *pars)
@@ -96,9 +145,8 @@ def param_samples_new(datafilesarray,pars, pars_err,Nsamples):
     #         par_sample.append(temp_pars)
     # return print(temp_chi2_sum)
 
-test_pars=([3.87,0.475,2.41,15,-0.032,-1.25,1.5,7,-0.05])
-test_errs=([0.31,0.03,0.16,1.4,0.017,0.19,0.4,2.6,0.11])
-print(param_samples_new(SIDIS_DataFilesArray,test_pars, test_errs,2))
+
+print(param_samples_new(SIDIS_DataFilesArray,test_pars, test_errs,10))
 
 
     # org_theory=totalfitfunc(datafilesarray,*pars)
