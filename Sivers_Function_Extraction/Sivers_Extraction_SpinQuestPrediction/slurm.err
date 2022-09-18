@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "NN_SIDIS_ModGen.py", line 326, in <module>
+    run_replica()
+  File "NN_SIDIS_ModGen.py", line 296, in run_replica
+    tempdf.to_csv(str(SIDIS_Repl_Folder)+'/rep'+str(replica_number)+'.csv')
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/core/generic.py", line 3466, in to_csv
+    return DataFrameRenderer(formatter).to_csv(
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/io/formats/format.py", line 1105, in to_csv
+    csv_formatter.save()
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/io/formats/csvs.py", line 237, in save
+    with get_handle(
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/io/common.py", line 702, in get_handle
+    handle = open(
+OSError: [Errno 28] No space left on device: 'SIDIS_Replica_Data/rep299.csv'
+Traceback (most recent call last):
+  File "NN_SIDIS_ModGen.py", line 326, in <module>
+    run_replica()
+  File "NN_SIDIS_ModGen.py", line 296, in run_replica
+    tempdf.to_csv(str(SIDIS_Repl_Folder)+'/rep'+str(replica_number)+'.csv')
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/core/generic.py", line 3466, in to_csv
+    return DataFrameRenderer(formatter).to_csv(
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/io/formats/format.py", line 1105, in to_csv
+    csv_formatter.save()
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/io/formats/csvs.py", line 237, in save
+    with get_handle(
+  File "/home/cee9hc/.conda/envs/lhapdf-tf/lib/python3.8/site-packages/pandas/io/common.py", line 702, in get_handle
+    handle = open(
+OSError: [Errno 28] No space left on device: 'SIDIS_Replica_Data/rep298.csv'
