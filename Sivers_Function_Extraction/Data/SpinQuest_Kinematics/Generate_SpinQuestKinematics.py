@@ -19,5 +19,14 @@ def GenSpinQuestKinematics(x1min,x1max,x2min,x2max,QTmin,QTmax,QMmin,QMmax,Npoin
     data_dictionary["tot_err"] = np.array([0 for i in range(0,Npoints)])
     return pd.DataFrame(data_dictionary)
 
-SpinQuestKins=GenSpinQuestKinematics(0.3,0.9,0.5,0.5,1.0,3.0,4.0,9.0,100)
-SpinQuestKins.to_csv("SpinQuest_Kinematics_xF_dependence.csv")
+SpinQuestKins_QT_2_QM_4=GenSpinQuestKinematics(0.3,0.9,0.5,0.5,2.0,2.0,4.0,4.0,500)
+SpinQuestKins_QT_2_QM_4.to_csv("SpinQuest_Kinematics_xF_dependence_QT_2_QM_4.csv")
+
+SpinQuestKins_QT_2_QM_6=GenSpinQuestKinematics(0.3,0.9,0.5,0.5,2.0,2.0,6.0,6.0,500)
+SpinQuestKins_QT_2_QM_6.to_csv("SpinQuest_Kinematics_xF_dependence_QT_2_QM_6.csv")
+
+SpinQuestKins_QT_4_QM_4=GenSpinQuestKinematics(0.3,0.9,0.5,0.5,4.0,4.0,4.0,4.0,500)
+SpinQuestKins_QT_4_QM_4.to_csv("SpinQuest_Kinematics_xF_dependence_QT_4_QM_4.csv")
+
+SpinQuestKins_QT_4_QM_6=GenSpinQuestKinematics(0.3,0.9,0.5,0.5,4.0,4.0,6.0,6.0,500)
+SpinQuestKins_QT_4_QM_6.to_csv("SpinQuest_Kinematics_xF_dependence_QT_4_QM_6.csv")
