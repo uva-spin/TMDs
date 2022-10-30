@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "Global_Fit_3Sets_H09_C09_C15.py", line 79, in <module>
+    print(generate_file(par_name_array))
+  File "Global_Fit_3Sets_H09_C09_C15.py", line 54, in generate_file
+    ms = Minuit(totalchi2Minuit,m1=m1v,Nu=Nuv,au=auv,bu=buv,Nub=Nubv,aub=aubv,bub=bubv,
+  File "/home/cee9hc/.local/lib/python3.8/site-packages/iminuit/minuit.py", line 616, in __init__
+    self._init_state = _make_init_state(self._pos2var, start, kwds)
+  File "/home/cee9hc/.local/lib/python3.8/site-packages/iminuit/minuit.py", line 2007, in _make_init_state
+    raise RuntimeError(
+RuntimeError: limit_m1 is not one of the parameters [m1 Nu au bu Nub aub bub Nd ad bd Ndb adb bdb Ns aS bS Nsb aSb bSb]
