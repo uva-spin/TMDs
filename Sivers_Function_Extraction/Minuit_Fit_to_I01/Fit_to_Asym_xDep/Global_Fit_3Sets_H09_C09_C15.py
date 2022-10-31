@@ -26,23 +26,23 @@ par_name_array=('m1','Nu','alphau','betau','Nubar','alphaub','betaub','Nd','alph
 
 m1v=7.0
 Nuv=0.89
-auv=2.78
-buv=19.4
-Nubv=-0.07
-aubv=0
-bubv=0
-Ndv=-2.33
-adv=2.5
-bdv=15.8
-Ndbv=-0.29
-adbv=0
-bdbv=0
-Nsv=14
-asv=4.9
-bsv=3
-Nsbv=0.18
-asbv=0
-bsbv=0
+auv=2.75
+buv=20
+Nubv=-0.12
+aubv=0.4
+bubv=20
+Ndv=-2.2
+adv=3.0
+bdv=15.5
+Ndbv=-0.7
+adbv=1.5
+bdbv=15
+Nsv=-20
+asv=4.7
+bsv=2.3
+Nsbv=20
+asbv=9.5
+bsbv=20
 
 from datetime import datetime
 
