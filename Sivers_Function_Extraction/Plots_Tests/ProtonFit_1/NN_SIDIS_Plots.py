@@ -152,10 +152,26 @@ def plotSivAsymmBands(resultdf, datasetdf, hadron, dependence):
     plt.errorbar(D_DEP, D_yplt,yerr=D_errplt, fmt='bo',label='Data')
     plt.errorbar(R_DEP, R_yplt,yerr=R_errplt, fmt='ro',label='NN')
     #### Here the user needs to define the plot title based on the data set ####
-    plt.title('SIDIS Sivers '+str(hadron)+' $\chi2$='+str('%.2f'%chi2val),fontsize=15)
-    #plt.ylim([-0.001,0.001])
-    plt.xlabel(str(dependence),fontsize=15)
-    plt.legend(loc=2,fontsize=15,handlelength=3)
+    #plt.title('SIDIS Sivers '+str(hadron)+' $\chi2$='+str('%.2f'%chi2val),fontsize=15)
+    if(str(hadron)=='pi+'):
+        plt.text(np.min(D_DEP),0.13,'$\chi^2$('+'$\pi^+$'+')='+str('%.2f'%chi2val),fontsize=16)
+    if(str(hadron)=='pi-'):
+        plt.text(np.min(D_DEP),0.13,'$\chi^2$('+'$\pi^-$'+')='+str('%.2f'%chi2val),fontsize=16)
+    if(str(hadron)=='pi0'):
+        plt.text(np.min(D_DEP),0.13,'$\chi^2$('+'$\pi^0$'+')='+str('%.2f'%chi2val),fontsize=16)
+    if(str(hadron)=='k+'):
+        plt.text(np.min(D_DEP),0.13,'$\chi^2$('+'$k^+$'+')='+str('%.2f'%chi2val),fontsize=16)
+    if(str(hadron)=='k-'):
+        plt.text(np.min(D_DEP),0.13,'$\chi^2$('+'$k^-$'+')='+str('%.2f'%chi2val),fontsize=16)
+    #plt.text(np.min(D_DEP),-0.07,'$\chi2$('+str(hadron)+')='+str('%.2f'%chi2val),fontsize=16)
+    plt.ylim([-0.1,0.15])
+    if(str(dependence)=='x'):
+        plt.xlabel('$x$',fontsize=16)
+    if(str(dependence)=='z'):
+        plt.xlabel('$z$',fontsize=16)
+    if(str(dependence)=='phT'):
+        plt.xlabel('$p_{hT}$',fontsize=16)
+    plt.legend(loc=4,fontsize=15,handlelength=3)
 
 
 fig1=plt.figure(1,figsize=(15,30))
@@ -434,16 +450,16 @@ def SiversFuncAntiQ(dataset,flavor,x,QQ,kp,fitresult):
     return tempsiv
     
 
-def plotSiversQ(flavor,ParmResults,col):
+def plotSiversQ(flavor,ParmResults,col, lbl):
     tempkT=np.linspace(0, 1.5)
     tempSiv=[SiversFuncQ(PDFdataset,flavor,0.1,2.4,tempkT[i],ParmResults) for i in range(0,len(tempkT))]
-    plt.plot(tempkT,tempSiv, '--', color = col)
+    plt.plot(tempkT,tempSiv, '--', color = col, label=lbl)
     #return tempSiv
 
-def plotSiversAntiQ(flavor,ParmResults, col):
+def plotSiversAntiQ(flavor,ParmResults, col, lbl):
     tempkT=np.linspace(0, 1.5)
     tempSiv=[SiversFuncAntiQ(PDFdataset,flavor,0.1,2.4,tempkT[i],ParmResults) for i in range(0,len(tempkT))]
-    plt.plot(tempkT,tempSiv, '--',color = col)
+    plt.plot(tempkT,tempSiv, '--',color = col, label =lbl)
     
 
 
@@ -461,13 +477,13 @@ def QSiversPlots(tempdf):
     tempfsErr = np.array(tempdf['fsErr'])
     plt.plot(tempKT, tempfu, 'b', label='$u$')
     plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
-    plotSiversQ(2,test_pars, 'b')
+    plotSiversQ(2,test_pars, 'b', '$u_{model}$')
     plt.plot(tempKT, tempfd, 'r', label='$d$')
     plt.fill_between(tempKT, tempfd-tempfdErr, tempfd+tempfdErr, facecolor='r', alpha=0.3)
-    plotSiversQ(1,test_pars, 'r')
+    plotSiversQ(1,test_pars, 'r', '$d_{model}$')
     plt.plot(tempKT, tempfs, 'g', label='$s$')
     plt.fill_between(tempKT, tempfs-tempfsErr, tempfs+tempfsErr, facecolor='g', alpha=0.3)
-    plotSiversQ(3,test_pars, 'g')
+    plotSiversQ(3,test_pars, 'g', '$s_{model}$')
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
     plt.ylim(-0.2,0.2)
@@ -485,13 +501,13 @@ def AntiQSiversPlots(tempdf):
     tempfsErr = np.array(tempdf['fsbarErr'])
     plt.plot(tempKT, tempfu, 'b', label='$\\bar{u}$')
     plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
-    plotSiversAntiQ(-2,test_pars, 'b')
+    plotSiversAntiQ(-2,test_pars, 'b', '$bar{u}_{model}$')
     plt.plot(tempKT, tempfd, 'r', label='$\\bar{d}$')
     plt.fill_between(tempKT, tempfd-tempfdErr, tempfd+tempfdErr, facecolor='r', alpha=0.3)
-    plotSiversAntiQ(-1,test_pars, 'r')
+    plotSiversAntiQ(-1,test_pars, 'r', '$bar{d}_{model}$')
     plt.plot(tempKT, tempfs, 'g', label='$\\bar{s}$')
     plt.fill_between(tempKT, tempfs-tempfsErr, tempfs+tempfsErr, facecolor='g', alpha=0.3)
-    plotSiversAntiQ(-3,test_pars, 'g')
+    plotSiversAntiQ(-3,test_pars, 'g', '$bar{s}_{model}$')
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
     plt.ylim(-0.2,0.2)
@@ -499,37 +515,103 @@ def AntiQSiversPlots(tempdf):
     plt.savefig(str(Plots_Folder)+'/'+'Sivers_AntiQ_SIDIS_NN.pdf', format='pdf', bbox_inches='tight')
     
 
-def UPlots(tempdf):
-    tempKT = np.array(tempdf['kperp'])
-    tempfu = np.array(tempdf['fu'])
-    tempfubar = np.array(tempdf['fubar'])
-    tempfubarErr = np.array(tempdf['fubarErr'])
-    plt.plot(tempKT, tempfu, 'b', label='$u$')
-    plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
-    plt.plot(tempKT, tempfubar, 'b', '--', label='$\\bar{u}$')
-    plt.fill_between(tempKT, tempfubar-tempfubarErr, tempfubar + tempfubarErr, facecolor='b', alpha=0.15)
-    plt.xticks(fontsize=20)
-    plt.yticks(fontsize=20)
-    plt.ylim(-0.2,0.2)
-    plt.legend(loc=4,fontsize=20,handlelength=3)
-    #plt.savefig(str(Plots_Folder)+'/'+'SiversQ_SIDIS_NN.pdf', format='pdf', bbox_inches='tight')
+# def UPlots(tempdf):
+#     tempKT = np.array(tempdf['kperp'])
+#     tempfu = np.array(tempdf['fu'])
+#     tempfubar = np.array(tempdf['fubar'])
+#     tempfubarErr = np.array(tempdf['fubarErr'])
+#     plt.plot(tempKT, tempfu, 'b', label='$u$')
+#     plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
+#     plt.plot(tempKT, tempfubar, 'b', '--', label='$\\bar{u}$')
+#     plt.fill_between(tempKT, tempfubar-tempfubarErr, tempfubar + tempfubarErr, facecolor='b', alpha=0.15)
+#     plt.xticks(fontsize=20)
+#     plt.yticks(fontsize=20)
+#     plt.ylim(-0.2,0.2)
+#     plt.legend(loc=4,fontsize=20,handlelength=3)
+#     #plt.savefig(str(Plots_Folder)+'/'+'SiversQ_SIDIS_NN.pdf', format='pdf', bbox_inches='tight')
 
-def DPlots(tempdf):
-    tempKT = np.array(tempdf['kperp'])
-    tempfu = np.array(tempdf['fu'])
-    tempfubar = np.array(tempdf['fubar'])
-    tempfubarErr = np.array(tempdf['fubarErr'])
-    plt.plot(tempKT, tempfu, 'b', label='$u$')
-    plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
-    plt.plot(tempKT, tempfubar, 'b', '--', label='$\\bar{u}$')
-    plt.fill_between(tempKT, tempfubar-tempfubarErr, tempfubar + tempfubarErr, facecolor='b', alpha=0.15)
-    plt.xticks(fontsize=20)
-    plt.yticks(fontsize=20)
-    plt.ylim(-0.2,0.2)
-    plt.legend(loc=4,fontsize=20,handlelength=3)
+# def DPlots(tempdf):
+#     tempKT = np.array(tempdf['kperp'])
+#     tempfu = np.array(tempdf['fu'])
+#     tempfubar = np.array(tempdf['fubar'])
+#     tempfubarErr = np.array(tempdf['fubarErr'])
+#     plt.plot(tempKT, tempfu, 'b', label='$u$')
+#     plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
+#     plt.plot(tempKT, tempfubar, 'b', '--', label='$\\bar{u}$')
+#     plt.fill_between(tempKT, tempfubar-tempfubarErr, tempfubar + tempfubarErr, facecolor='b', alpha=0.15)
+#     plt.xticks(fontsize=20)
+#     plt.yticks(fontsize=20)
+#     plt.ylim(-0.2,0.2)
+#     plt.legend(loc=4,fontsize=20,handlelength=3)
     
 
 fig7=plt.figure(7)    
 QSiversPlots(Sivers_CSV_df)
 fig8=plt.figure(8)
 AntiQSiversPlots(Sivers_CSV_df)
+
+#plt.rcParams["font.family"] = "Times New Roman"
+# plt.rcParams['font.family'] = 'DeJavu Serif'
+# plt.rcParams['font.serif'] = ['Times New Roman']
+
+def QSiversPlots_Combined(tempdf):
+    tempKT = np.array(tempdf['kperp'])
+    tempfu = np.array(tempdf['fu'])
+    tempfuErr = np.array(tempdf['fuErr'])
+    tempfd = np.array(tempdf['fd'])
+    tempfdErr = np.array(tempdf['fdErr'])
+    tempfs = np.array(tempdf['fs'])
+    tempfsErr = np.array(tempdf['fsErr'])
+    plt.plot(tempKT, tempfu, 'b', label='$u$')
+    plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
+    plotSiversQ(2,test_pars, 'b', '$u_{model}$')
+    plt.plot(tempKT, tempfd, 'r', label='$d$')
+    plt.fill_between(tempKT, tempfd-tempfdErr, tempfd+tempfdErr, facecolor='r', alpha=0.3)
+    plotSiversQ(1,test_pars, 'r', '$d_{model}$')
+    plt.plot(tempKT, tempfs, 'g', label='$s$')
+    plt.fill_between(tempKT, tempfs-tempfsErr, tempfs+tempfsErr, facecolor='g', alpha=0.3)
+    plotSiversQ(3,test_pars, 'g', '$s_{model}$')
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.text(0.01, 0.18,'$Q^2=2.4$ GeV$^2$', fontsize=16)
+    plt.text(0.01, 0.16,'$x=0.1$', fontsize=16)
+    plt.xlabel('$k_{\perp}$ (GeV)', fontsize=16)
+    plt.ylabel('$x \Delta f^N (x,k_{\perp})$', fontsize=16)
+    plt.ylim(-0.2,0.2)
+    plt.legend(loc=1,fontsize=16,handlelength=3)
+    #plt.savefig(str(Plots_Folder)+'/'+'SiversQ_SIDIS_NN.pdf', format='pdf', bbox_inches='tight')
+    
+
+def AntiQSiversPlots_Combined(tempdf):
+    tempKT = np.array(tempdf['kperp'])
+    tempfu = np.array(tempdf['fubar'])
+    tempfuErr = np.array(tempdf['fubarErr'])
+    tempfd = np.array(tempdf['fdbar'])
+    tempfdErr = np.array(tempdf['fdbarErr'])
+    tempfs = np.array(tempdf['fsbar'])
+    tempfsErr = np.array(tempdf['fsbarErr'])
+    plt.plot(tempKT, tempfu, 'b', label='$\\bar{u}$')
+    plt.fill_between(tempKT, tempfu-tempfuErr, tempfu+tempfuErr, facecolor='b', alpha=0.3)
+    plotSiversAntiQ(-2,test_pars, 'b', '$\\bar{u}_{model}$')
+    plt.plot(tempKT, tempfd, 'r', label='$\\bar{d}$')
+    plt.fill_between(tempKT, tempfd-tempfdErr, tempfd+tempfdErr, facecolor='r', alpha=0.3)
+    plotSiversAntiQ(-1,test_pars, 'r', '$\\bar{d}_{model}$')
+    plt.plot(tempKT, tempfs, 'g', label='$\\bar{s}$')
+    plt.fill_between(tempKT, tempfs-tempfsErr, tempfs+tempfsErr, facecolor='g', alpha=0.3)
+    plotSiversAntiQ(-3,test_pars, 'g', '$\\bar{s}_{model}$')
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.text(0.01, 0.18,'$Q^2=2.4$ GeV$^2$', fontsize=16)
+    plt.text(0.01, 0.16,'$x=0.1$', fontsize=16)
+    plt.xlabel('$k_{\perp}$  (GeV)', fontsize=16)
+    plt.ylabel('$x \Delta f^N (x,k_{\perp})$', fontsize=16)
+    plt.ylim(-0.2,0.2)
+    plt.legend(loc=1,fontsize=16,handlelength=3)
+    #plt.savefig(str(Plots_Folder)+'/'+'Sivers_AntiQ_SIDIS_NN.pdf', format='pdf', bbox_inches='tight')
+
+fig9=plt.figure(9,figsize=(20,8))
+plt.subplot(1,2,1)    
+QSiversPlots_Combined(Sivers_CSV_df)
+plt.subplot(1,2,2)
+AntiQSiversPlots_Combined(Sivers_CSV_df)
+plt.savefig(str(Plots_Folder)+'/'+'Sivers_SIDIS_NN.pdf', format='pdf', bbox_inches='tight')
