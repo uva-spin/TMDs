@@ -201,3 +201,9 @@ T_Xplt, T_yplt, T_errplt = DYdata.makeData(df)
     
 trn_X, tst_X, trn_y, tst_y, trn_err, tst_err = trn_tst(T_Xplt, T_yplt, T_errplt)
 
+Model_DY = createModel_DY()
+Model_DY.compile(optimizer = tf.keras.optimizers.Adam(0.01),loss = tf.keras.losses.MeanSquaredError())
+
+Model_DY.summary()
+
+Model_DY.fit(trn_X, trn_y, validation_data=(tst_X, tst_y), epochs=300, verbose=2)
