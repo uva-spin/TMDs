@@ -47,6 +47,7 @@ def DNN_model(width=100, L1_reg=10**(-12), activation='relu'):
 
 # Concatenate input tensors
 concatenated_inputs = np.column_stack((x1Vals, x2Vals))
+concatenated_inputs_rev = np.column_stack((x2Vals,x1Vals))
 
 # Create the DNN model
 model = DNN_model()
@@ -71,16 +72,36 @@ model = DNN_model()
 #     loss = tf.reduce_mean(tf.abs(product_pred - product_true))
 #     return loss
 
+# def custom_loss(y_true, y_pred):
+#     fx1_output = model.get_layer('fx1').output
+#     fx2_output = model.get_layer('fx2').output
+#     product_1 = tf.reduce_prod(tf.concat([fx1_output, fx2_output], axis=1), axis=1)
+#     product_2 = tf.reduce_prod(tf.concat([fx2_output, fx1_output], axis=1), axis=1)
+#     mse_loss = tf.reduce_mean(tf.square(y_true - y_pred))
+#     product_loss = tf.reduce_mean(product_1 - product_2) 
+#     loss = product_loss + mse_loss
+#     return loss
+
+
 def custom_loss(y_true, y_pred):
-    fx1_output = model.get_layer('fx1').output
-    fx2_output = model.get_layer('fx2').output
-    product_1 = tf.reduce_prod(tf.concat([fx1_output, fx2_output], axis=1), axis=1)
-    product_2 = tf.reduce_prod(tf.concat([fx2_output, fx1_output], axis=1), axis=1)
+    fx1result_model = tf.keras.Model(inputs=model.input, outputs=model.get_layer('fx1').output)
+    fx2result_model = tf.keras.Model(inputs=model.input, outputs=model.get_layer('fx2').output)
+    fx1_result = fx1result_model.predict(concatenated_inputs)
+    fx2_result = fx2result_model.predict(concatenated_inputs)
+    fx1rev_result = fx1result_model.predict(concatenated_inputs_rev)
+    fx2rev_result = fx2result_model.predict(concatenated_inputs_rev)
+    product_1 = tf.reduce_prod(tf.concat([fx1_result, fx2_result], axis=1), axis=1)
+    product_2 = tf.reduce_prod(tf.concat([fx1rev_result, fx2rev_result], axis=1), axis=1)
     mse_loss = tf.reduce_mean(tf.square(y_true - y_pred))
-    loss = tf.reduce_mean(product_1 - product_2) + mse_loss
+    product_loss = tf.reduce_mean(product_1 - product_2) 
+    loss = product_loss + mse_loss
     return loss
 
+# fx1result_model = tf.keras.Model(inputs=model.input, outputs=model.get_layer('fx1').output)
+# fx2result_model = tf.keras.Model(inputs=model.input, outputs=model.get_layer('fx2').output)
 
+# fx1_result = fx1result_model.predict(concatenated_inputs)
+# fx2_result = fx2result_model.predict(concatenated_inputs)
 
 lr = 0.00001
 model.compile(optimizer=tf.keras.optimizers.Adam(lr), loss='mse')
