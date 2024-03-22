@@ -6,7 +6,7 @@
 ## (2) f(x,k) --> f(x) when k -> 0
 ## (3) f(x)S(k) = DNN(x,k)
 ## Here is an example with simple fucntions for f(x) and S(k)
-##  f(x) = x + 1
+##  f(x) = fu(x) and fubar(x) from NNPDF40
 ##  S(k) = k + 1
 ############################
 
@@ -21,27 +21,35 @@ from scipy.integrate import simps
 ############ Generating Pseudodata #################
 
 
+
+lhapdf_df = pd.read_csv('NNPDF4_nlo.csv').dropna(axis=0, how='all').dropna(axis=1, how='all')
+
+
 def f(x):
     return x + 1
 
 # def Sk(k):
 #     return 2*k**2/(k**2 + 4)
 
-# def Sk(k):
-#     return np.exp(-k**2/4)
-
 def Sk(k):
-    return k+1
+    return np.exp(-k**2/4)
+
+# def Sk(k):
+#     return k+1
 
 def fx1kx2k(x1,x2,pT,k):
     return f(x1)*Sk(k)*f(x2)*Sk(pT-k)
 
-x1vals = np.linspace(0.1, 0.3, 10)
-x2vals = np.linspace(0.1, 0.7, 10)
-pTvals = np.linspace(0.1,2,10)
-Kvals = np.linspace(0.1,2,10)
+#x1vals = np.linspace(0.1, 0.3, 10)
+x1vals = np.array(lhapdf_df['x'])
+x2vals = np.array(lhapdf_df['x'])
+pTvals = np.linspace(0.1,2,len(x1vals))
+Kvals = np.linspace(0.1,2,len(x1vals))
 pT_k_vals = pTvals - Kvals
-kk_values_loss = np.array(np.linspace(0,0,10))
+kk_values_loss = np.array(np.linspace(0,0,len(x1vals)))
+
+fu = np.array(lhapdf_df['fu'])
+fubar = np.array(lhapdf_df['fubar'])
 
 def Apseudo(x1,x2,pT):
     tempx1, tempx2, temppT, tempA = [], [], [], []
@@ -64,17 +72,17 @@ Hidden_Layers=2
 Nodes_per_HL=50
 Learning_Rate = 0.0001
 L1_reg = 10**(-12)
-EPOCHS = 500
+EPOCHS = 300
 
 
-def create_nn_model(name, width=Nodes_per_HL, activation='relu6', seed = None):
+def create_nn_model(name, width=Nodes_per_HL, activation='relu'):
     inp = tf.keras.Input(shape=(2))
     x = tf.keras.layers.Dense(width, activation=activation)(inp)
     x1 = tf.keras.layers.Dense(width, activation=activation)(x)
     x2 = tf.keras.layers.Dense(width, activation=activation)(x1)
-    x3 = tf.keras.layers.Dense(width, activation=activation)(x2)
-    x4 = tf.keras.layers.Dense(width, activation=activation)(x3)
-    nnout = tf.keras.layers.Dense(1, activation=activation)(x4)
+    # x3 = tf.keras.layers.Dense(width, activation=activation)(x2)
+    # x4 = tf.keras.layers.Dense(width, activation=activation)(x3)
+    nnout = tf.keras.layers.Dense(1, activation=activation)(x2)
     mod = tf.keras.Model(inp, nnout, name=name)
     return mod
 
@@ -130,7 +138,7 @@ model = createModel_DY()
 def pdf1_loss_val(y_true, y_pred):
     modnnu = model.get_layer('nnu')
     concatenated_inputs_1 = np.column_stack((x1vals,kk_values_loss))
-    fx1_true = f(x1vals) * Sk(kk_values_loss)
+    fx1_true = f(x1vals)
     fx1_result = modnnu(concatenated_inputs_1)
     pdf1_loss = tf.reduce_mean(tf.square(fx1_true - fx1_result))
     return pdf1_loss
@@ -139,7 +147,7 @@ def pdf1_loss_val(y_true, y_pred):
 def pdf2_loss_val(y_true, y_pred):
     modnnubar = model.get_layer('nnubar')
     concatenated_inputs_2 = np.column_stack((x2vals,kk_values_loss))
-    fx2_true = f(x2vals) * Sk(kk_values_loss)
+    fx2_true = f(x2vals)
     fx2_result = modnnubar(concatenated_inputs_2)
     pdf2_loss = tf.reduce_mean(tf.square(fx2_true - fx2_result))
     return pdf2_loss
@@ -177,12 +185,27 @@ def mse_loss(y_true, y_pred):
 #     return prod_1_loss_val(y_true, y_pred) + prod_2_loss_val(y_true, y_pred) 
 
 
-def custom_loss(y_true, y_pred):
-    return mse_loss(y_true, y_pred) + pdf1_loss_val(y_true, y_pred) + pdf2_loss_val(y_true, y_pred) 
-
-
 # def custom_loss(y_true, y_pred):
-#     return mse_loss(y_true, y_pred) 
+#     return mse_loss(y_true, y_pred) + pdf1_loss_val(y_true, y_pred) + pdf2_loss_val(y_true, y_pred) 
+
+def custom_loss(y_true, y_pred):
+    return mse_loss(y_true, y_pred) 
+
+
+
+plt.figure(1, figsize=(10, 6))
+plt.plot(x1vals, fu, label='$f_u(x)$')
+plt.plot(x1vals, fubar, label='$f_{\\bar{u}}(x)$')
+plt.title('NNPDF4 fu and fubar')
+plt.xlabel('x')
+plt.ylabel('f')
+plt.legend()
+plt.grid(True)
+#plt.show()
+plt.savefig('PDFs.pdf')
+
+
+
 
 #model.compile(optimizer=optimizer, loss=loss_function)
 #model.compile(optimizer=optimizer, loss=loss_function)
