@@ -102,7 +102,7 @@ Hidden_Layers=7
 Nodes_per_HL=500
 Learning_Rate = 0.0001
 L1_reg = 10**(-12)
-EPOCHS = 200
+EPOCHS = 500
 
 
 # def create_nn_model(name, hidden_layers=Hidden_Layers, width=Nodes_per_HL, activation='relu'):
@@ -114,6 +114,7 @@ EPOCHS = 200
 #     mod = tf.keras.Model(inp, nnout, name=name)
 #     return mod
 
+
 def create_nn_model(name):
     inp = tf.keras.Input(shape=(2))
     x = tf.keras.layers.Dense(224, activation='tanh')(inp)
@@ -121,10 +122,33 @@ def create_nn_model(name):
     x2 = tf.keras.layers.Dense(160, activation='tanh')(x1)
     x3 = tf.keras.layers.Dense(32, activation='tanh')(x2)
     x4 = tf.keras.layers.Dense(512, activation='relu')(x3)
-    nnout = tf.keras.layers.Dense(1, activation='relu')(x)
+    nnout = tf.keras.layers.Dense(1, activation='relu')(x4)
     mod = tf.keras.Model(inp, nnout, name=name)
     return mod
 
+# def create_nn_model(name):
+#     inp = tf.keras.Input(shape=(2))
+#     initializer = tf.keras.initializers.RandomUniform(minval=-0.03,maxval=0.03,seed=42)
+#     x = tf.keras.layers.Dense(224, activation='relu6', kernel_initializer = initializer)(inp)
+#     x1 = tf.keras.layers.Dense(384, activation='relu6', kernel_initializer = initializer)(x)
+#     x2 = tf.keras.layers.Dense(160, activation='relu6', kernel_initializer = initializer)(x1)
+#     x3 = tf.keras.layers.Dense(32, activation='relu6', kernel_initializer = initializer)(x2)
+#     x4 = tf.keras.layers.Dense(512, activation='relu6', kernel_initializer = initializer)(x3)
+#     nnout = tf.keras.layers.Dense(1)(x4)
+#     mod = tf.keras.Model(inp, nnout, name=name)
+#     return mod
+
+
+# def create_nn_model(name):
+#     inp = tf.keras.Input(shape=(2))
+#     initializer = tf.keras.initializers.RandomUniform(minval=-0.02,maxval=0.02,seed=42)
+#     x = tf.keras.layers.Dense(128, activation='relu', kernel_initializer = initializer)(inp)
+#     x1 = tf.keras.layers.Dense(352, activation='relu', kernel_initializer = initializer)(x)
+#     x2 = tf.keras.layers.Dense(192, activation='tanh', kernel_initializer = initializer)(x1)
+#     x3 = tf.keras.layers.Dense(448, activation='relu', kernel_initializer = initializer)(x2)
+#     #nnout = tf.keras.layers.Dense(1, activation='relu', kernel_initializer = initializer)(x3)
+#     mod = tf.keras.Model(inp, x3, name=name)
+#     return mod
 
 
 def createModel_DY():
