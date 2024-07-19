@@ -89,15 +89,22 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
 
     fu_xA = df['fu_xA']
     fubar_xB = df['fubar_xB']
+
+    fu_xB = df['fu_xB']
+    fubar_xA = df['fubar_xA']
+
     #Kvals = np.linspace(0.1,2,len(x1vals))
     Kvals = np.linspace(0,0,len(x1vals))
-    pT_k_vals = pTvals - Kvals
+    pT_k_vals = pTvals*0 - Kvals
 
     # true_values_1 = fu_xA * Skq(Kvals)  
     # true_values_2 = fubar_xB * Skqbar(pT_k_vals) 
 
     true_values_1 = fu_xA 
     true_values_2 = fubar_xB
+
+    true_values_1_rev = fu_xB 
+    true_values_2_rev = fubar_xA
 
     concatenated_inputs_1 = np.column_stack((x1vals,Kvals,QMvals))
     concatenated_inputs_2 = np.column_stack((x2vals,pT_k_vals,QMvals))
@@ -108,6 +115,9 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     tempfu = []
     tempfubar = []
 
+    tempfu_rev = []
+    tempfubar_rev = []
+
     for i in range(num_replicas):
         t = modelsArray[i]
         modnnu = t.get_layer('nnu')
@@ -116,6 +126,11 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
         temp_pred_fubar = modnnubar.predict(concatenated_inputs_2)
         tempfu.append(list(temp_pred_fu))
         tempfubar.append(list(temp_pred_fubar))
+
+        temp_pred_fu_rev = modnnu.predict(concatenated_inputs_2)
+        temp_pred_fubar_rev = modnnubar.predict(concatenated_inputs_1)
+        tempfu_rev.append(list(temp_pred_fu_rev))
+        tempfubar_rev.append(list(temp_pred_fubar_rev))
     
     # tempfu = np.array(tempfu)
     # tempfu = np.array(tempfu.mean(axis=0))
@@ -128,6 +143,15 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     tempfubar = np.array(tempfubar)
     tempfubar_mean = np.array(tempfubar.mean(axis=0))
     tempfubar_err = np.array(tempfubar.std(axis=0))
+
+
+    tempfu_rev = np.array(tempfu_rev)
+    tempfu_mean_rev = np.array(tempfu_rev.mean(axis=0))
+    tempfu_err_rev = np.array(tempfu_rev.std(axis=0))
+
+    tempfubar_rev = np.array(tempfubar_rev)
+    tempfubar_mean_rev = np.array(tempfubar_rev.mean(axis=0))
+    tempfubar_err_rev = np.array(tempfubar_rev.std(axis=0))
 
     # return (tempfu_mean-tempfu_err).flatten()
 
@@ -158,6 +182,32 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     plt.savefig('Evaluations_TMDs_with_PDFs/True_Pred_fx_qbar_'+str(output_name)+'.pdf')
     plt.close()
 
+
+    plt.figure(3, figsize=(10, 6))
+    plt.plot(x2vals, true_values_1_rev, label='True nnu', linestyle='--')
+    plt.plot(x2vals, tempfu_mean_rev, 'r', label='Predicted nnu')
+    plt.fill_between(x2vals, (tempfu_mean_rev-tempfu_err_rev).flatten(), (tempfu_mean_rev+tempfu_err_rev).flatten(), facecolor='r', alpha=0.3)
+    plt.title('Comparison of True and Predicted nnu PDF Values')
+    plt.xlabel('x2')
+    plt.ylabel('nnu')
+    plt.legend()
+    plt.grid(True)
+    #plt.show()
+    plt.savefig('Evaluations_TMDs_with_PDFs/True_Pred_fx_q_rev_'+str(output_name)+'.pdf')
+    plt.close()
+
+    plt.figure(4, figsize=(10, 6))
+    plt.plot(x1vals, true_values_2_rev, label='True nnubar', linestyle='--')
+    plt.plot(x1vals, tempfubar_mean_rev, 'r', label='Predicted nnubar')
+    plt.fill_between(x1vals, (tempfubar_mean_rev-tempfubar_err_rev).flatten(), (tempfubar_mean_rev+tempfubar_err_rev).flatten(), facecolor='r', alpha=0.3)
+    plt.title('Comparison of True and Predicted nnubar PDF Values')
+    plt.xlabel('x1')
+    plt.ylabel('nnubar')
+    plt.legend()
+    plt.grid(True)
+    #plt.show()
+    plt.savefig('Evaluations_TMDs_with_PDFs/True_Pred_fx_qbar_rev_'+str(output_name)+'.pdf')
+    plt.close()
 
 
 # def Generate_Comparison_Plots(df,output_name):
