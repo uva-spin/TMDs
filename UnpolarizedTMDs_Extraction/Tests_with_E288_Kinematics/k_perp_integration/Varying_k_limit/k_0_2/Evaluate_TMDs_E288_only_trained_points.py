@@ -100,7 +100,8 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
 
     Kvals = np.linspace(1,1,len(x1vals))
     #Kvals = np.linspace(0,0,len(x1vals))
-    pT_k_vals = pTvals - Kvals
+    # pT_k_vals = pTvals - Kvals
+    pT_k_vals = Kvals
 
     # true_values_1 = fu_xA * Skq(Kvals)  
     # true_values_2 = fubar_xB * Skqbar(pT_k_vals) 
@@ -142,8 +143,8 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
         tempfu_rev.append(list(temp_pred_fu_rev))
         tempfubar_rev.append(list(temp_pred_fubar_rev))
 
-        temp_sigma = t.predict([x1vals, x2vals,pTvals,QMvals])
-        sigma.append(temp_sigma[0]) # Index 0 because we only need the cross-section
+        # temp_sigma = t.predict([x1vals, x2vals,pTvals,QMvals])
+        # sigma.append(temp_sigma[0]) # Index 0 because we only need the cross-section
      
 
     tempfu = np.array(tempfu)
@@ -164,14 +165,14 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     tempfubar_err_rev = np.array(tempfubar_rev.std(axis=0))
 
 
-    tempA = np.array(sigma)
-    tempA_mean = np.array(tempA.mean(axis=0))
-    tempA_mean = np.array(tempA_mean.flatten())
+    # tempA = np.array(sigma)
+    # tempA_mean = np.array(tempA.mean(axis=0))
+    # tempA_mean = np.array(tempA_mean.flatten())
 
     # return (tempfu_mean-tempfu_err).flatten()
 
-    #print(len(tempA_mean))
-    #print(len(Avals))
+    # print(len(true_values_1))
+    # print(len(tempfu_mean))
 
 
     plt.figure(1, figsize=(10, 6))
@@ -228,19 +229,19 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     plt.close()
 
 
-    # 3D scatter plot
-    fig = plt.figure(5)
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(x1vals, x2vals, Avals, c='r', marker='o', label='Actual')
-    # Plot the model predictions
-    ax.scatter(x1vals, x2vals, tempA_mean, c='b', marker='^', label='Predicted')
-    ax.set_xlabel('x1')
-    ax.set_ylabel('x2')
-    ax.set_zlabel('A')
-    ax.set_title('Actual vs Predicted')
-    ax.legend()
-    #plt.show()
-    plt.savefig('Evaluations_TMDs_DataPoints/Actual_vs_Predicted_CS_'+str(output_name)+'.pdf')
-    plt.close()
+    # # 3D scatter plot
+    # fig = plt.figure(5)
+    # ax = fig.add_subplot(111, projection='3d')
+    # ax.scatter(x1vals, x2vals, Avals, c='r', marker='o', label='Actual')
+    # # Plot the model predictions
+    # ax.scatter(x1vals, x2vals, tempA_mean, c='b', marker='^', label='Predicted')
+    # ax.set_xlabel('x1')
+    # ax.set_ylabel('x2')
+    # ax.set_zlabel('A')
+    # ax.set_title('Actual vs Predicted')
+    # ax.legend()
+    # #plt.show()
+    # plt.savefig('Evaluations_TMDs_DataPoints/Actual_vs_Predicted_CS_'+str(output_name)+'.pdf')
+    # plt.close()
 
 Generate_Comparison_Plots(df,numreplicas,'points')
