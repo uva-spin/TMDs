@@ -1,0 +1,13 @@
+Hyperparameter,Value
+num_layers,5
+units_0,128
+activation_0,tanhshrink
+learning_rate,0.001
+units_1,256
+activation_1,relu6
+units_2,192
+activation_2,relu6
+units_3,32
+activation_3,tanh
+units_4,192
+activation_4,relu6

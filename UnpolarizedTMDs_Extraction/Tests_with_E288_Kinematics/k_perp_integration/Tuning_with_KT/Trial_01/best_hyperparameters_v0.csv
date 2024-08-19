@@ -1,0 +1,17 @@
+Hyperparameter,Value
+num_layers,4
+units_0,64
+activation_0,tanh
+learning_rate,0.001
+units_1,64
+activation_1,relu6
+units_2,288
+activation_2,relu
+units_3,128
+activation_3,softmax
+units_4,480
+activation_4,sigmoid
+units_5,64
+activation_5,relu
+units_6,160
+activation_6,relu
