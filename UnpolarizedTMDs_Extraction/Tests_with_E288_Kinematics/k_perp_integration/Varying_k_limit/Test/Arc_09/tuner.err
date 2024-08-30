@@ -1,0 +1,41 @@
+To execute the default application inside the container, run:
+apptainer run --nv $CONTAINERDIR/tensorflow-2.13.0.sif
+
+This container is based on NGC 23.08
+https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/rel-23-08.html#rel-23-08
+INFO:    gocryptfs not found, will not be able to use gocryptfs
+INFO:    underlay of /etc/localtime required more than 50 (91) bind mounts
+INFO:    underlay of /usr/bin/nvidia-smi required more than 50 (523) bind mounts
+13:4: not a valid test operator: (
+13:4: not a valid test operator: 550.54.14
+2024-08-21 09:02:19.172864: I tensorflow/core/platform/cpu_feature_guard.cc:183] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-08-21 09:02:24.673179: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1636] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 78695 MB memory:  -> device: 0, name: NVIDIA A100-SXM4-80GB, pci bus id: 0000:90:00.0, compute capability: 8.0
+2024-08-21 09:06:38.831971: I tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:625] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+INFO:    gocryptfs not found, will not be able to use gocryptfs
+INFO:    underlay of /etc/localtime required more than 50 (91) bind mounts
+INFO:    underlay of /usr/bin/nvidia-smi required more than 50 (523) bind mounts
+13:4: not a valid test operator: (
+13:4: not a valid test operator: 550.54.14
+2024-08-21 09:06:59.465161: I tensorflow/core/platform/cpu_feature_guard.cc:183] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-08-21 09:07:04.849248: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1636] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 78695 MB memory:  -> device: 0, name: NVIDIA A100-SXM4-80GB, pci bus id: 0000:90:00.0, compute capability: 8.0
+2024-08-21 09:11:19.194521: I tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:625] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+INFO:    gocryptfs not found, will not be able to use gocryptfs
+INFO:    underlay of /etc/localtime required more than 50 (91) bind mounts
+INFO:    underlay of /usr/bin/nvidia-smi required more than 50 (523) bind mounts
+13:4: not a valid test operator: (
+13:4: not a valid test operator: 550.54.14
+2024-08-21 10:38:28.722891: I tensorflow/core/platform/cpu_feature_guard.cc:183] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-08-21 10:38:34.211119: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1636] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 78695 MB memory:  -> device: 0, name: NVIDIA A100-SXM4-80GB, pci bus id: 0000:90:00.0, compute capability: 8.0
+2024-08-21 10:42:51.945781: I tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:625] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+INFO:    gocryptfs not found, will not be able to use gocryptfs
+INFO:    underlay of /etc/localtime required more than 50 (91) bind mounts
+INFO:    underlay of /usr/bin/nvidia-smi required more than 50 (523) bind mounts
+13:4: not a valid test operator: (
+13:4: not a valid test operator: 550.54.14
+2024-08-21 10:43:06.358177: I tensorflow/core/platform/cpu_feature_guard.cc:183] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-08-21 10:43:11.787522: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1636] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 78695 MB memory:  -> device: 0, name: NVIDIA A100-SXM4-80GB, pci bus id: 0000:90:00.0, compute capability: 8.0
+2024-08-21 10:47:28.066710: I tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:625] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
