@@ -93,10 +93,8 @@ def create_nn_model(name):
 #    return np.sqrt(qT**2 + k**2 - 2*qT*k*np.cos(phi))
 
 def kB(qT, k, phi):
-    # Ensure k and phi are converted to TensorFlow tensors
     k = tf.convert_to_tensor(k, dtype=qT.dtype)
     phi = tf.convert_to_tensor(phi, dtype=qT.dtype)
-    # Perform the computation
     return tf.sqrt(qT**2 + k**2 - 2*qT*k*tf.cos(phi))
 
 
@@ -124,7 +122,7 @@ def createModel_DY():
         for phi in temp_phi:
             tempkB = kB(qT, k_val, phi)
 
-            # Inputs for the neural networks
+            # Inputs 
             nnu_input = tf.keras.layers.Concatenate()([x1, qT * 0 + k_val, qM])
             nnubar_input = tf.keras.layers.Concatenate()([x2, qT * 0 + tempkB, qM])
 
@@ -139,7 +137,7 @@ def createModel_DY():
 
             phi_product_list.append(result)
 
-        # Sum over all phi values and multiply by dphi
+        # Sum over all phi
         tmd_phi_product_sum = tf.reduce_sum(phi_product_list, axis=0) * dphi
 
         # Append the sum to the k product list
@@ -153,7 +151,7 @@ def createModel_DY():
         f_xB.append(modnnu(xB_k_input))
         fbar_xA.append(modnnubar(xA_k_input))
 
-    # Summing over all k values using tf.reduce_sum
+    # Summing over all k values 
     tmd_product_sum = tf.reduce_sum(k_product_list, axis=0) * dk
 
     # k_perp Integrals
@@ -203,28 +201,6 @@ def split_data(X,y,yerr, fq, fqbar, fq_rev, fqbar_rev, split=0.1):
 
   return train_X, test_X, train_y, test_y, train_yerr, test_yerr, train_fq, test_fq, train_fqbar, test_fqbar, train_fq_rev, test_fq_rev, train_fqbar_rev, test_fqbar_rev
 
-
-
-# model.compile(optimizer='adam', loss=mse_loss)
-# # history = model.fit([df['x1'],df['x2'],df['pT']], df['A'], epochs=EPOCHS, batch_size=32, verbose=2)
-# history = model.fit([df['x1'],df['x2'],df['pT'],df['QM']], [df['A'], fu, fubar], epochs=EPOCHS, batch_size=32, verbose=2)
-# model.save('model.h5', save_format='h5')
-
-
-# predictions = model.predict([df['x1'],df['x2'],df['pT'],df['QM']])[0]
-
-# # 3D scatter plot
-# fig = plt.figure(2)
-# ax = fig.add_subplot(111, projection='3d')
-# ax.scatter(x1Vals, pTVals, df['A'], c='r', marker='o', label='Actual')
-# ax.scatter(x1Vals, pTVals, predictions, c='b', marker='^', label='Predicted')
-# ax.set_xlabel('x1')
-# ax.set_ylabel('pT')
-# ax.set_zlabel('A')
-# ax.set_title('Actual vs Predicted')
-# ax.legend()
-# #plt.show()
-# plt.savefig('Actual_vs_Predicted_Integral.pdf')
 
 
 model.compile(optimizer='adam', loss=mse_loss)
