@@ -17,7 +17,7 @@ def create_folders(folder_name):
     else:
         print(f"Folder '{folder_name}' already exists!")
         
-models_path = '/scratch/cee9hc/Unpolarized_TMD/E288/flavor_1/Phase_2/Test_05'
+models_path = '/home/ishara/Documents/TMDs/Tests_with_Pseudo_data/Tests_with_E288_Kinematics/k_perp_integration/Tests_with_k_phi/phi_0_test'
 create_folders(str(models_path))
 Models_folder = str(models_path)+'/'+'DNNmodels'
 create_folders(str(Models_folder))
@@ -205,10 +205,11 @@ def split_data(X,y,yerr, fq, fqbar, fq_rev, fqbar_rev, split=0.1):
 
 model.compile(optimizer='adam', loss=mse_loss)
 
-def run_replica():
-    replica_number = sys.argv[1]   # If you want to use this scrip for job submission, then uncomment this line, 
+def run_replica(i):
+    # replica_number = sys.argv[1]   # If you want to use this scrip for job submission, then uncomment this line, 
     #  then comment the following line, and then delete the 'i' in the parenthesis of run_replica(i) function's definition
     # replica_number = 99
+    replica_number = i
     tempdf = GenerateReplicaData(df)
     trainKin, testKin, trainA, testA, trainAerr, testAerr, trainfq, testfq, trainfqbar, testfqbar, trainfq_rev, testfq_rev, trainfqbar_rev, testfqbar_rev = split_data(tempdf[['x1', 'x2', 'pT', 'QM']],
                                                                        tempdf['A'], tempdf['errA'], tempdf['fu_xA'], tempdf['fubar_xB'], tempdf['fu_xB'], tempdf['fubar_xA'], split=0.1)
@@ -231,4 +232,6 @@ def run_replica():
     plt.close()
     
 
-run_replica()
+#run_replica()
+for i in range(0,3):
+    run_replica(i)

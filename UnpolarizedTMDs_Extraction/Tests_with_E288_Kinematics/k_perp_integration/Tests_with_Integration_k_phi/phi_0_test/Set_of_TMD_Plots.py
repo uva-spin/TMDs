@@ -20,7 +20,7 @@ def create_folders(folder_name):
 plots_folder = 'Comparison_Comparison_Plots'
 create_folders(str(plots_folder))
 
-models_path = '/scratch/cee9hc/Unpolarized_TMD/E288/flavor_1/Phase_2/Test_05'
+models_path = '/home/ishara/Documents/TMDs/Tests_with_Pseudo_data/Tests_with_E288_Kinematics/k_perp_integration/Tests_with_k_phi/phi_0_test'
 Models_folder = str(models_path) + '/' + 'DNNmodels'
 folders_array = os.listdir(Models_folder)
 numreplicas = len(folders_array)
