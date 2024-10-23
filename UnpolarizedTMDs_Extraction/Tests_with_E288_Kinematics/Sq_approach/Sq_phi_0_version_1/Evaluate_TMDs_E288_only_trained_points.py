@@ -53,33 +53,14 @@ def Skqbar(k):
 
 
 
-def Generate_Comparison_Plots(df, num_replicas, output_name):
+def Generate_Comparison_Plots(df,num_replicas, output_name):
     x1vals = df['x1']
     x2vals = df['x2']
     pTvals = df['pT']
     QMvals = df['QM']
 
-    Avals = df['A']
-
-    fu_xA = df['fu_xA']
-    fubar_xB = df['fubar_xB']
-
-    fu_xB = df['fu_xB']
-    fubar_xA = df['fubar_xA']
-
-    Kvals = np.linspace(6,6,len(x1vals))
-    #Kvals = np.linspace(0,0,len(x1vals))
-    # pT_k_vals = pTvals - Kvals
+    Kvals = np.linspace(0.001,6,len(x1vals))
     pT_k_vals = Kvals
-
-    # true_values_1 = fu_xA * Skq(Kvals)  
-    # true_values_2 = fubar_xB * Skqbar(pT_k_vals) 
-
-    # true_values_1 = fu_xA * Skq(Kvals)
-    # true_values_2 = fubar_xB * Skqbar(pT_k_vals) 
-
-    # true_values_1_rev = fu_xB * Skq(Kvals)
-    # true_values_2_rev = fubar_xA * Skqbar(pT_k_vals) 
 
     true_values_1 = Skq(Kvals)
     true_values_2 = Skqbar(pT_k_vals) 
@@ -88,13 +69,7 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     true_values_2_rev = Skqbar(pT_k_vals) 
 
     concatenated_inputs_1 = np.column_stack((Kvals,QMvals))
-    concatenated_inputs_2 = np.column_stack((pT_k_vals,QMvals))
-
-
-    #concatenated_inputs_for_sigma = np.column_stack((x1vals, x2vals,pTvals,QMvals))
-
-    # predicted_values_1 = modnnu.predict(concatenated_inputs_1)
-    # predicted_values_2 = modnnubar.predict(concatenated_inputs_2)
+    concatenated_inputs_2 = np.column_stack((Kvals,QMvals))
 
     tempfu = []
     tempfubar = []
@@ -140,23 +115,13 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     tempfubar_err_rev = np.array(tempfubar_rev.std(axis=0))
 
 
-    # tempA = np.array(sigma)
-    # tempA_mean = np.array(tempA.mean(axis=0))
-    # tempA_mean = np.array(tempA_mean.flatten())
-
-    # return (tempfu_mean-tempfu_err).flatten()
-
-    # print(len(true_values_1))
-    # print(len(tempfu_mean))
-
-
     plt.figure(1, figsize=(10, 6))
-    plt.plot(x1vals, true_values_1, 'b.', label='True nnu')
-    plt.plot(x1vals, tempfu_mean, 'r.', label='Predicted nnu')
+    plt.plot(Kvals, true_values_1, 'b.', label='True nnu')
+    plt.plot(Kvals, tempfu_mean, 'r.', label='Predicted nnu')
     #plt.fill_between(x1vals, (tempfu_mean-tempfu_err).flatten(), (tempfu_mean+tempfu_err).flatten(), facecolor='r', alpha=0.3)
     plt.title('Comparison of True and Predicted nnu TMD Values')
-    plt.xlabel('x1')
-    plt.ylabel('nnu')
+    plt.xlabel('k')
+    plt.ylabel('Sq(k)')
     plt.legend()
     plt.grid(True)
     #plt.show()
@@ -164,11 +129,11 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     plt.close()
 
     plt.figure(2, figsize=(10, 6))
-    plt.plot(x2vals, true_values_2, 'b.', label='True nnubar')
-    plt.plot(x2vals, tempfubar_mean, 'r.', label='Predicted nnubar')
+    plt.plot(Kvals, true_values_2, 'b.', label='True nnubar')
+    plt.plot(Kvals, tempfubar_mean, 'r.', label='Predicted nnubar')
     #plt.fill_between(x2vals, (tempfubar_mean-tempfubar_err).flatten(), (tempfubar_mean+tempfubar_err).flatten(), facecolor='r', alpha=0.3)
     plt.title('Comparison of True and Predicted nnubar TMD Values')
-    plt.xlabel('x2')
+    plt.xlabel('k')
     plt.ylabel('nnubar')
     plt.legend()
     plt.grid(True)
@@ -178,11 +143,11 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
 
 
     plt.figure(3, figsize=(10, 6))
-    plt.plot(x2vals, true_values_1_rev, 'b.', label='True nnu')
-    plt.plot(x2vals, tempfu_mean_rev, 'r.', label='Predicted nnu')
+    plt.plot(Kvals, true_values_1_rev, 'b.', label='True nnu')
+    plt.plot(Kvals, tempfu_mean_rev, 'r.', label='Predicted nnu')
     #plt.fill_between(x2vals, (tempfu_mean_rev-tempfu_err_rev).flatten(), (tempfu_mean_rev+tempfu_err_rev).flatten(), facecolor='r', alpha=0.3)
     plt.title('Comparison of True and Predicted nnu TMD Values')
-    plt.xlabel('x2')
+    plt.xlabel('k')
     plt.ylabel('nnu')
     plt.legend()
     plt.grid(True)
@@ -191,11 +156,11 @@ def Generate_Comparison_Plots(df, num_replicas, output_name):
     plt.close()
 
     plt.figure(4, figsize=(10, 6))
-    plt.plot(x1vals, true_values_2_rev, 'b.', label='True nnubar')
-    plt.plot(x1vals, tempfubar_mean_rev, 'r.', label='Predicted nnubar')
+    plt.plot(Kvals, true_values_2_rev, 'b.', label='True nnubar')
+    plt.plot(Kvals, tempfubar_mean_rev, 'r.', label='Predicted nnubar')
     #plt.fill_between(x1vals, (tempfubar_mean_rev-tempfubar_err_rev).flatten(), (tempfubar_mean_rev+tempfubar_err_rev).flatten(), facecolor='r', alpha=0.3)
     plt.title('Comparison of True and Predicted nnubar TMD Values')
-    plt.xlabel('x1')
+    plt.xlabel('k')
     plt.ylabel('nnubar')
     plt.legend()
     plt.grid(True)
