@@ -185,3 +185,5 @@ def Generate_Comparison_Plots(df,num_replicas, output_name):
     # plt.close()
 
 Generate_Comparison_Plots(df,numreplicas,'points')
+
+
