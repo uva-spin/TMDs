@@ -141,13 +141,6 @@ def createModel_DY():
         result = tf.add(product_1, product_2)
         result = tf.multiply(k_val,result)
 
-        #phi_product_list.append(result)
-
-        # Sum over all phi
-        #tmd_phi_product_sum = tf.reduce_sum(phi_product_list, axis=0) * dphi
-
-        # Append the sum to the k product list
-        #k_product_list.append(tmd_phi_product_sum)
         k_product_list.append(result)
 
         # Compute f_xA, fbar_xB, f_xB, fbar_xA for the current k_val
@@ -164,7 +157,6 @@ def createModel_DY():
     alpha = 1/137
     mult = ((4*np.pi*alpha)**2)/(9*qM**3)
     CrossSection = mult*qT*tmd_product_sum
-
 
     # k_perp Integrals
     Sq_sum = tf.reduce_sum(Sq_int, axis=0) * dk
