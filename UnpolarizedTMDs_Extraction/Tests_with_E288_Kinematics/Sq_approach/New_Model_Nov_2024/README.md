@@ -22,6 +22,31 @@ k integration limits 0 to 2
 Same as Test4 but k integration from 0.0001 to 10
 
 #Test6
-Same as Test5 but splitting the training part which saves two separate models and an additional script to make plots based on the saved models
+Same as Test5 but splitting the training part which saves two separate models and an additional script to make plots based on the saved models. Train only for 100 epochs.
+
+#Test7
+Same as Test6 but using 1000 epochs
+architecture: 2,64,64,128,64,1
+Result: Doesn't seem to be optimized yet
+
+#Test8
+Same as Test6 (added the loss plot)
+500 epochs
+trial1: Epochs=500,  Arc: 2, 64, 32, 16, 8, 1: not the best
+trial2: Epochs=500, Arc:32x11,1 : not the best
+
+#Test9
+Same as Test8 but with only one input for the DNNs
+
+#Test10
+Same as Test8 but generating pseudodata with only a few values of QM (1,2,3) and use one of that in the evaluation.
+
+#Test11
+Same as Test8 but connecting QM part of the DNN differently (separate sub-structure in the architecture).
+
+
+#Obseverations at this stage
+Both Test10 and Test11 seems going in the right direction but need to optimize
+
 
 
