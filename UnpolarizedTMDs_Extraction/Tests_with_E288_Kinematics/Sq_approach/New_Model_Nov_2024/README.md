@@ -48,5 +48,21 @@ Same as Test8 but connecting QM part of the DNN differently (separate sub-struct
 #Obseverations at this stage
 Both Test10 and Test11 seems going in the right direction but need to optimize
 
+#Test12
+Same as Test11 but changed the architecture to have layers 64,32,16 for each k and QM paths and 1000 epochs
+
+#Test13
+Same as Test10: 1000 epochs and LR = 0.0001: the loss got down to ~400
+
+#Test14
+Same as Tes10/Test13 but with LR = 0.001
+
+#Test15
+Same as Test10/Test13 let's call it Arc#1 with
+LR = 0.001, Epochs = 1000, Arc: 256,128,64,32,16,8,1
+kins = phibins = 25
+
+
+
 
 
