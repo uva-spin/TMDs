@@ -55,13 +55,15 @@ Same as Test11 but changed the architecture to have layers 64,32,16 for each k a
 Same as Test10: 1000 epochs and LR = 0.0001: the loss got down to ~400
 
 #Test14
-Same as Tes10/Test13 but with LR = 0.001
+Same as Tes10/Test13 but with Epochs = 1000
 
 #Test15
 Same as Test10/Test13 let's call it Arc#1 with
 LR = 0.001, Epochs = 1000, Arc: 256,128,64,32,16,8,1
 kins = phibins = 25
 
+#Test16
+Same as Test15 but with LR = 0.0001
 
 
 
