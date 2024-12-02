@@ -70,4 +70,12 @@ Not optimized yet.
 #Test17
 Took Test14 model and added another layer of 128 nodes after the input layer.
 
+#Test18
+Took Test14 model and used sigmoid activation function in the output layer
+
+#Test19
+Took Test12 model and used sigmoid activation function in the output layer
+
+
+
 
