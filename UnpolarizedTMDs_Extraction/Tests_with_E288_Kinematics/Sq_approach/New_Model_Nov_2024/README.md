@@ -56,6 +56,7 @@ Same as Test10: 1000 epochs and LR = 0.0001: the loss got down to ~400
 
 #Test14
 Same as Tes10/Test13 but with Epochs = 1000
+So far, this is the best one
 
 #Test15
 Same as Test10/Test13 let's call it Arc#1 with
@@ -64,7 +65,9 @@ kins = phibins = 25
 
 #Test16
 Same as Test15 but with LR = 0.0001
+Not optimized yet.
 
-
+#Test17
+Took Test14 model and added another layer of 128 nodes after the input layer.
 
 
