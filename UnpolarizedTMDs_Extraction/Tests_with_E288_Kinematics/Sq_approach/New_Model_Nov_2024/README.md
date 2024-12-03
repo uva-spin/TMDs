@@ -72,10 +72,20 @@ Took Test14 model and added another layer of 128 nodes after the input layer.
 
 #Test18
 Took Test14 model and used sigmoid activation function in the output layer
+Loss function is large ~62000
+So looks like "sigmoid" in the final layer doesn't work
 
 #Test19
 Took Test12 model and used sigmoid activation function in the output layer
+Loss function is large ~62000
+So looks like "sigmoid" in the final layer doesn't work
 
+At this stage, let's call the two models
+Mod_A: k,Q2 inputs processed together in the DNN model: Test14
+Mod_B: k,Q2 inputs processed separately inside the DNN model: Test11,12,19
+
+#Test20
+USed Mod_A with Keras Tuner
 
 
 
