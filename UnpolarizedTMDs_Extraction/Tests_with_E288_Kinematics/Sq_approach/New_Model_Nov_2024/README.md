@@ -85,7 +85,39 @@ Mod_A: k,Q2 inputs processed together in the DNN model: Test14
 Mod_B: k,Q2 inputs processed separately inside the DNN model: Test11,12,19
 
 #Test20
-USed Mod_A with Keras Tuner
+Used Mod_A with Keras Tuner
+This contains trials with different approeaches even including the tensor board visualization. Note: delete the folders (logs, my_tuner_dir) before running the Fit.py code. 
+Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning Rate
+23  | 128    | relu6  | 16    |  relu6 |  8     | relu6   | adam      | 0.00302184616
+24  | 128    | relu6  | 32    |  relu  |  8     | relu6   | rmsprop   | 0.00614510259
+25  | 48     | relu6  | 64    |  relu6 |  8     | relu6   | adam      | 0.00697462396
+26  | 112    | relu   | 32    |  relu  | 24     | relu    | adam      | 0.00771223638
+
+
+
+#Test21
+Took Test14 model and added another layer of 128 nodes after the input layer + changed the learning rate to 0.00005
+
+#Test22
+Same as 21 but with 25 phi bins
+
+#Test23
+Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning Rate
+23  | 128    | relu6  | 16    |  relu6 |  8     | relu6   | adam      | 0.00302184616
+
+
+#Test24
+Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning Rate
+24  | 128    | relu6  | 32    |  relu  |  8     | relu6   | rmsprop   | 0.00614510259
+
+#Test25
+Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning Rate
+25  | 48     | relu6  | 64    |  relu6 |  8     | relu6   | adam      | 0.00697462396
+
+#Test26
+Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning Rate
+26  | 112    | relu   | 32    |  relu  | 24     | relu    | adam      | 0.00771223638
+
 
 
 

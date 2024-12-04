@@ -1,0 +1,2 @@
+units_1,activation_1,units_2,activation_2,units_3,activation_3,optimizer,learning_rate
+112,relu,32,relu,24,relu,adam,0.007712236382125775
