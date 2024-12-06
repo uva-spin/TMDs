@@ -118,6 +118,16 @@ Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning
 Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning Rate
 26  | 112    | relu   | 32    |  relu  | 24     | relu    | adam      | 0.00771223638
 
+#Test27
+Implementing the constraints for S1 and S2 in which those integrals of k separately equal to 1. Here, I used 25 bins for k and phi
+
+
+#Test28
+Implementing f(x) values using lhapdf. Modified the Test27 code accordingly to test this.
+
+
+
+
 
 
 
