@@ -120,12 +120,15 @@ Arc | Layer1 | activ1 |Layer2 | activ2 | Layer3 | activ3  | Optimizer | Learning
 
 #Test27
 Implementing the constraints for S1 and S2 in which those integrals of k separately equal to 1. Here, I used 25 bins for k and phi
-
+QM for S1 and S2 was used as zeros.
 
 #Test28
 Implementing f(x) values using lhapdf. Modified the Test27 code accordingly to test this.
 
 
+#Test29
+Same as Test27 but with time stamps and epochs 2000
+QM for S1 and S2 was used as 2.0.
 
 
 
