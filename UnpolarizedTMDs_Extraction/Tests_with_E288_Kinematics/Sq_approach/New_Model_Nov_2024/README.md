@@ -130,6 +130,15 @@ Implementing f(x) values using lhapdf. Modified the Test27 code accordingly to t
 Same as Test27 but with time stamps and epochs 2000
 QM for S1 and S2 was used as 2.0.
 
+#Test30
+Wanted to try without permutation (from Test29 code)
+
+#Test31
+Same code as Test30 but with 3000 epochs instead of 2000
+
+
+
+
 
 
 
