@@ -131,10 +131,18 @@ Same as Test27 but with time stamps and epochs 2000
 QM for S1 and S2 was used as 2.0.
 
 #Test30
+NO PERMUTATION
 Wanted to try without permutation (from Test29 code)
+Saved the results for epochs = {2000, 3000} separate folders
 
 #Test31
-Same code as Test30 but with 3000 epochs instead of 2000
+NO PERMUTATION
+Same code as Test30 but with 2000 epochs with 100 kbins and 100 phi bins
+
+
+#Test32
+Same as Test14 but with 3000 epochs
+
 
 
 

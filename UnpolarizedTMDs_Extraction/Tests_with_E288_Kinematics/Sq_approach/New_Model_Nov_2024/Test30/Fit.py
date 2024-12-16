@@ -23,7 +23,7 @@ kmax = 10.0
 kbins = 25
 phibins = 25
 optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
-epochs = 2000
+epochs = 5000
 print_epochs = 10
 models_folder = 'Models'
 
