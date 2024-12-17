@@ -143,7 +143,8 @@ Same code as Test30 but with 2000 epochs with 100 kbins and 100 phi bins
 #Test32
 Same as Test14 but with 3000 epochs
 
-
+#Test33
+Modified the Test32 to use the constraints implemented in Test27. QM was used as 2 GeV.
 
 
 
