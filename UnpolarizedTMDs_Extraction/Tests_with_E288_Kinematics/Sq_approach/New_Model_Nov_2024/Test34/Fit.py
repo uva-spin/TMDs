@@ -17,9 +17,9 @@ kmin = 0.0001
 kmax = 10.0
 kbins = 100
 phibins = 100
-optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+#optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
-epochs = 3000
+epochs = 1000
 print_epochs = 10
 models_folder = 'Models'
 
