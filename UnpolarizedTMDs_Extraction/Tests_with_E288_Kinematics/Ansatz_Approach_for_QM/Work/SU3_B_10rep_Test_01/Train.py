@@ -70,11 +70,11 @@ Sk_contribution = (8*mm*mm + qT_values**4)/(32*np.pi*mm)*(np.exp(-(qT_values**2)
 A_true_values = A_true_values / Sk_contribution
 
 
-# 🔹 Normalize Inputs (QM) and Outputs (A_true)
+# Normalize Inputs (QM) and Outputs (A_true)
 qT_mean, qT_std = tf.reduce_mean(qT_values), tf.math.reduce_std(qT_values)
 qT_values = (qT_values - qT_mean) / qT_std  # Standardization
 
-# 🔹 Normalize Inputs (QM) and Outputs (A_true)
+# Normalize Inputs (QM) and Outputs (A_true)
 QM_mean, QM_std = tf.reduce_mean(QM_values), tf.math.reduce_std(QM_values)
 QM_values = (QM_values - QM_mean) / QM_std  # Standardization
 
