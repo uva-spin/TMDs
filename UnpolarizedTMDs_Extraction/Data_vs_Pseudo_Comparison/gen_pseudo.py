@@ -26,6 +26,9 @@ def fDNNQ(QM, b=0.5):
     return np.exp(-b * QM)
 
 # def fDNNQ(QM, b=0.5):
+#     return ((QM**2)/(b*np.pi))*np.exp(-(QM**2)/b)
+
+# def fDNNQ(QM, b=0.5):
 #     return b * np.exp(-b * QM)
 
 # def fDNNQ(QM, A=1, mu=5.0, sigma=0.001):
@@ -63,8 +66,8 @@ def compute_A(x1, x2, qT, QM):
     # factor = qT*((4*np.pi*alpha)**2)/(9*QM*QM*QM)/(2*np.pi*qT)
     factor = ((4*np.pi*alpha)**2)/(9*QM*QM*QM)/(2*np.pi)
     cross_section =  fDNN * factor * PDFs * Sk_contribution
-    hc_factor = 3.89*10**8
-    cross_section = cross_section * hc_factor * 1000
+    hc_factor = 3.89*10**8 * 1000
+    cross_section = cross_section * hc_factor 
     return cross_section
 
 
@@ -89,11 +92,6 @@ results_df = pd.DataFrame({
     'dA': dA_values
 })
 
-#results_df.to_csv("pseudodataE288_BQM_B2.csv", index=False)
-results_df.to_csv("pseudodata_E288.csv", index=False)
-
-print("Computed A values saved csv file")
-
 
 def gen_plots(df1, df2, filename):
     df1["unique_group"] = df1["QM"].astype(str) + "_" + df1["x1"].astype(str) + "_" + df1["x2"].astype(str)
@@ -115,7 +113,7 @@ def gen_plots(df1, df2, filename):
         A1_err = group_df1['dA'].values
         QM = group_df1['QM'].values[0]
 
-        axes[idx].errorbar(qT1, A1, yerr=A1_err, fmt='o', color='blue', label='df1: $E\\frac{d^3\\sigma}{dp^3}$')
+        axes[idx].errorbar(qT1, A1, yerr=A1_err, fmt='o', color='blue', label='Experiment')
 
 
         group_df2 = groups_df2.get_group(group_name)
@@ -123,7 +121,7 @@ def gen_plots(df1, df2, filename):
         A2 = group_df2['A'].values
         A2_err = group_df2['dA'].values
 
-        axes[idx].errorbar(qT2, A2, yerr=A2_err, fmt='s', color='red', label='df2: $E\\frac{d^3\\sigma}{dp^3}$')
+        axes[idx].errorbar(qT2, A2, yerr=A2_err, fmt='s', color='red', label='Pseudo Data')
 
         axes[idx].set_title(f'$Q_M$ = {QM:.2f} GeV')
         axes[idx].set_xlabel('qT')
@@ -135,6 +133,8 @@ def gen_plots(df1, df2, filename):
     plt.savefig(str(filename) + ".pdf")
     plt.show()
 
+results_df.to_csv("pseudodata_E772.csv", index=False)
+print("Computed A values saved csv file")
 
 gen_plots(data,results_df,"E772_Comparison")
 
