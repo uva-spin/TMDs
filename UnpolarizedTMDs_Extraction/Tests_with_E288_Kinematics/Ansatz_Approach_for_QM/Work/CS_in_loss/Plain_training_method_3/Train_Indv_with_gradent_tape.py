@@ -336,9 +336,9 @@ def replica_model(i):
     generate_ratio_subplots(replica_data, i)
 
     #initial_lr = 0.01 
-    initial_lr = 0.0001  
-    epochs = 1000  
-    batch_size = 20
+    initial_lr = 0.00001  
+    epochs = 10000  
+    batch_size = 200
 
     # Extract Values
     PDFs = tf.convert_to_tensor(replica_data['PDFs'].values, dtype=tf.float32)
