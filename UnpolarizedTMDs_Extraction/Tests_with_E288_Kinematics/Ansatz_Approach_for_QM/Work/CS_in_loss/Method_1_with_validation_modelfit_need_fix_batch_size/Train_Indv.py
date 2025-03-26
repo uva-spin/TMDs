@@ -82,7 +82,7 @@ def GenerateReplicaData(df):
     tempBtrue = np.array(fDNNQ(tempQM))
     while True:
         #ReplicaA = np.random.uniform(low=tempA - 1.0*tempAerr, high=tempA + 1.0*tempAerr)
-        ReplicaA = np.random.normal(loc=tempA, scale=1.0*tempAerr)
+        ReplicaA = np.random.normal(loc=tempA, scale=0.0*tempAerr)
         if np.all(ReplicaA > 0):
             break
     pseudodata_df['A_replica'] = ReplicaA
@@ -327,39 +327,16 @@ def gen_B_plots(model, df,replica_id):
 ####################################
 
 
-# Define the DNN Model
-def DNNB():
-    return tf.keras.Sequential([
-        tf.keras.Input(shape=(1,)), 
-        tf.keras.layers.Dense(6, activation='relu'),
-        tf.keras.layers.Dense(1, activation='linear')
-    ])
-
-
-# # Define Loss Function
-# def custom_loss(y_true, y_pred):
-#     return tf.reduce_mean(tf.square(y_pred - y_true))  # MSE loss
-
-
-# # Define custom loss function for both training and validation
-# def custom_loss(y_true, y_pred, factors, pdfs, sqt, qm_int):
-#     a_pred = y_pred * hc_factor * factors * pdfs * sqt * qm_int
-#     return tf.reduce_mean(tf.square(a_pred - y_true))
-
-# Create custom loss function class
-class CrossSectionLoss(tf.keras.losses.Loss):
-    def __init__(self, factor, pdfs, sqt, qm_int, name="cross_section_loss"):
-        super().__init__(name=name)
-        self.factor = factor
-        self.pdfs = pdfs
-        self.sqt = sqt
-        self.qm_int = qm_int
-        
-    def call(self, y_true, y_pred):
-        a_pred = y_pred * hc_factor * self.factor * self.pdfs * self.sqt * self.qm_int
-        return tf.reduce_mean(tf.square(a_pred - y_true))
-
-
+# # Define the DNN Model
+# def DNNB():
+#     return tf.keras.Sequential([
+#         tf.keras.Input(shape=(1,)), 
+#         tf.keras.layers.Dense(100, activation='relu'),
+#         tf.keras.layers.Dense(100, activation='relu'),
+#         tf.keras.layers.Dense(100, activation='relu'),
+#         tf.keras.layers.Dense(100, activation='relu'),
+#         tf.keras.layers.Dense(1, activation='linear')
+#     ])
 
 def split_data(X,y,split=0.1):
   temp =np.random.choice(list(range(len(y))), size=int(len(y)*split), replace = False)
@@ -373,124 +350,204 @@ def split_data(X,y,split=0.1):
   return train_X, test_X, train_y, test_y
 
 
-# Train the Model
+
+def DNNB():
+    return tf.keras.Sequential([
+        tf.keras.Input(shape=(1,)), 
+        tf.keras.layers.Dense(128, activation='relu', kernel_initializer='he_normal'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Dropout(0.2),
+        tf.keras.layers.Dense(64, activation='relu', kernel_initializer='he_normal'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Dropout(0.2),
+        tf.keras.layers.Dense(32, activation='relu', kernel_initializer='he_normal'),
+        tf.keras.layers.Dense(1, activation='linear')
+    ])
+
+
+def create_custom_loss(factor_values, pdfs_values, sqt_values, qm_int_values):
+    """
+    Creates a custom loss function with pre-computed physical parameters
+    
+    Args:
+        factor_values (np.ndarray): Precomputed factor values
+        pdfs_values (np.ndarray): Precomputed PDF values
+        sqt_values (np.ndarray): Precomputed S(qT) values
+        qm_int_values (np.ndarray): Precomputed QM integral values
+    
+    Returns:
+        callable: A custom loss function
+    """
+    def custom_loss(y_true, y_pred):
+        """
+        Custom loss function that reconstructs A using physical model parameters
+        
+        Args:
+            y_true (tf.Tensor): True A values
+            y_pred (tf.Tensor): Predicted B(QM) values
+        
+        Returns:
+            tf.Tensor: Computed loss
+        """
+        # Reconstruct A using the physical model parameters
+        a_pred = (y_pred * hc_factor * factor_values * 
+                  pdfs_values * sqt_values * qm_int_values)
+        
+        # Compute squared error
+        squared_error = tf.square(a_pred - y_true)
+        
+        # Add a regularization term to prevent extreme predictions
+        regularization_term = tf.reduce_mean(tf.square(y_pred))
+        
+        # Combine squared error with regularization
+        total_loss = tf.reduce_mean(squared_error) + 0.01 * regularization_term
+        
+        return total_loss
+    
+    return custom_loss
+
 def replica_model(i):
     # Generate replica data
     replica_data = GenerateReplicaData(data)
     replica_data.to_csv(f"{replica_data_folder}/replica_data_{i}.csv")
-    # Let's apply the condition
-    delta = 0.1
-    # # Condition to cut large fluctuations/deviations of B(QM) with respect to qT
-    # replica_data = replica_data[(replica_data['A_ratio'] <= 1 + delta) & (replica_data['A_ratio'] >= 1 - delta) | 
-    #                         (replica_data['B_ratio'] <= 1 + delta) & (replica_data['B_ratio'] >= 1 - delta)]
-    # QM_values = np.array(replica_data['QM'])
-    # B_QM = np.array(replica_data['B_calc'])
-    # Generate comprison plots
-    generate_replica_A_subplots(replica_data,i)
-    generate_replica_B_subplots(replica_data,i)
-    generate_ratio_subplots(replica_data,i)
 
+    generate_replica_A_subplots(replica_data, i)
+    generate_replica_B_subplots(replica_data, i)
+    generate_ratio_subplots(replica_data, i)
+
+    # Prepare features and target
     prep_A = replica_data['A_replica']
     prep_features = replica_data.drop(['A_replica'], axis=1)
+
     train_X, test_X, train_A, test_A = split_data(prep_features, prep_A)
 
-    QM_train = np.array(train_X['QM'])
-    A_train = np.array(train_A)
+    # Prepare training data
+    train_QM_values = np.array(train_X['QM'])
+    train_A_replica = np.array(train_A)
+    train_factor_values = np.array(train_X['factor'])
+    train_PDFs_values = np.array(train_X['PDFs'])
+    train_SqT_values = np.array(train_X['SqT'])
+    train_QM_int_values = np.array(train_X['QM_int'])
 
-    # Training data loss
-    train_loss = CrossSectionLoss(
-        factor=np.array(train_X['factor']),
-        pdfs=np.array(train_X['PDFs']),
-        sqt=np.array(train_X['SqT']),
-        qm_int=np.array(train_X['QM_int'])
-    )
-    
-    # Validation data loss
-    val_loss = CrossSectionLoss(
-        factor=np.array(test_X['factor']),
-        pdfs=np.array(test_X['PDFs']),
-        sqt=np.array(test_X['SqT']),
-        qm_int=np.array(test_X['QM_int'])
-    )
+    # Prepare validation data
+    test_QM_values = np.array(test_X['QM'])
+    test_A_replica = np.array(test_A)
+    test_factor_values = np.array(test_X['factor'])
+    test_PDFs_values = np.array(test_X['PDFs'])
+    test_SqT_values = np.array(test_X['SqT'])
+    test_QM_int_values = np.array(test_X['QM_int'])
 
-    QM_test = np.array(test_X['QM'])
-    A_test = np.array(test_A)
+    # Normalize input features
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    train_QM_scaled = scaler.fit_transform(train_QM_values.reshape(-1, 1))
+    test_QM_scaled = scaler.transform(test_QM_values.reshape(-1, 1))
 
-    initial_lr = 0.001  
-    epochs = 500  
-    batch_size = 81
-
-    # lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-    #     initial_learning_rate=initial_lr,
-    #     decay_steps=50,
-    #     decay_rate=0.96,
-    #     staircase=True
-    # )
-    
+    # Create the model
     dnnB = DNNB()
-    optimizer = tf.keras.optimizers.Adam(learning_rate=initial_lr)
-    dnnB.compile(optimizer=optimizer, loss=train_loss)
+    
+    # Learning rate schedule
+    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+        initial_learning_rate=0.001,
+        decay_steps=100,
+        decay_rate=0.9,
+        staircase=True
+    )
+    
+    # Create custom loss function for training
+    train_loss_fn = create_custom_loss(
+        train_factor_values, 
+        train_PDFs_values, 
+        train_SqT_values, 
+        train_QM_int_values
+    )
+    
+    # Create custom loss function for validation
+    val_loss_fn = create_custom_loss(
+        test_factor_values, 
+        test_PDFs_values, 
+        test_SqT_values, 
+        test_QM_int_values
+    )
+    
+    # Compile the model with the custom loss and learning rate schedule
+    optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
+    dnnB.compile(
+        optimizer=optimizer, 
+        loss=train_loss_fn,
+        metrics=[val_loss_fn]  # Use validation loss as a metric
+    )
 
-    class ValidationLossCallback(tf.keras.callbacks.Callback):
-        def __init__(self, x_val, y_val, val_loss_fn):
-            self.x_val = x_val
-            self.y_val = y_val
-            self.val_loss_fn = val_loss_fn
+    # Early stopping and model checkpointing
+    early_stopping = tf.keras.callbacks.EarlyStopping(
+        monitor='val_loss', 
+        patience=50, 
+        restore_best_weights=True,
+        min_delta=1e-5
+    )
+    
+    model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
+        filepath=os.path.join(models_folder, f'best_DNNB_model_{i}.h5'),
+        save_best_only=True,
+        monitor='val_loss'
+    )
+
+    # Create a custom callback to track losses
+    class LossHistory(tf.keras.callbacks.Callback):
+        def __init__(self):
+            super().__init__()
+            self.train_losses = []
             self.val_losses = []
-            
+        
         def on_epoch_end(self, epoch, logs=None):
-            # Get predictions
-            y_pred = self.model.predict(self.x_val, verbose=0)
-            # Calculate validation loss
-            val_loss = self.val_loss_fn(self.y_val, y_pred)
-            # Store validation loss
-            self.val_losses.append(float(val_loss.numpy()))
-            # Add to logs for history
-            logs['val_loss'] = float(val_loss.numpy())
-            # Print progress every 100 epochs
+            self.train_losses.append(logs.get('loss'))
+            self.val_losses.append(logs.get('val_loss'))
+            
+            # Print progress every 20 epochs
             if (epoch + 1) % 20 == 0:
-                print(f"Epoch {epoch + 1}/{epochs}, Loss: {logs['loss']:.4f}, Val Loss: {logs['val_loss']:.4f}")
-    
-    # Create the callback
-    val_callback = ValidationLossCallback(
-        x_val=QM_test,
-        y_val=A_test,
-        val_loss_fn=val_loss
-    )
-    
+                print(f"Epoch {epoch + 1}, Train Loss: {logs.get('loss'):.4f}, Val Loss: {logs.get('val_loss'):.4f}")
+
+    # Create loss history callback
+    loss_history = LossHistory()
+
+    # Train the model
     history = dnnB.fit(
-        x=QM_train,  
-        y=A_train, 
-        epochs=epochs,
-        batch_size=batch_size,
-        verbose=2,
-        callbacks=[val_callback]
+        train_QM_scaled, train_A_replica, 
+        validation_data=(test_QM_scaled, test_A_replica),
+        epochs=2000, 
+        batch_size=12,
+        callbacks=[loss_history, early_stopping, model_checkpoint],
+        verbose=0  # Set to 1 if you want to see training progress
     )
-    
-    # Save Model
+
+    # [Rest of the function remains the same]
+
+    # Save final model
     model_path = os.path.join(models_folder, f'DNNB_model_{i}.h5')
     dnnB.save(model_path)
     print(f"Model {i} saved successfully at {model_path}!")
-    generate_subplots(dnnB,replica_data,i)
-    gen_B_plots(dnnB, replica_data, i)
 
-    history_dict = history.history
-    history_dict['val_loss'] = val_callback.val_losses
+    # Generate plots
+    generate_subplots(dnnB, replica_data, i)
+    gen_B_plots(dnnB, replica_data, i)
     
     # Plot Loss
     plt.figure(figsize=(10, 6))
-    plt.plot(history_dict['loss'], label='Loss', color='b')
-    plt.plot(history_dict['val_loss'], label='Loss', color='r')
+    plt.plot(loss_history.train_losses, label='Training Loss', color='b')
+    plt.plot(loss_history.val_losses, label='Validation Loss', color='r')
     plt.title(f'Model {i} Loss over Epochs')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
+    plt.yscale('log')  # Use log scale to better visualize loss
     plt.legend()
     plt.grid(True)
     loss_plot_path = os.path.join(loss_plot_folder, f'loss_plot_model_{i}.pdf')
     plt.savefig(loss_plot_path)
     print(f"Loss plot for Model {i} saved successfully at {loss_plot_path}!")
+    plt.close()
+    
+    return dnnB, replica_data
 
-# Train multiple replicas
+# Train replicas
 for i in range(3):
     replica_model(i)
-
