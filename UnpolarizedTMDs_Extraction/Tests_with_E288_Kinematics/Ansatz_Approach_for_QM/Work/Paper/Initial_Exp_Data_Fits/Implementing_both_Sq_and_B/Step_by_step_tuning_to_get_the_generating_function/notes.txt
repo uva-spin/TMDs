@@ -1,0 +1,191 @@
+Test_00
+Original unconstrained fit results
+
+
+Test_1
+
+Data
+E288_200: 4.5, 5.5, 6.5
+
+initial_lr = 0.001
+epochs = 1000 
+batch_size = 8
+
+DNNB details
+Hidden layer 1, 50 nodes, all 'relu'
+
+DNNS
+Hidden layer 1: 100 nodes
+Hidden layer 2: 100 nodes
+Hidden layer 3: 100 nodes
+
+This seems similar to the one with DNNB has 250 nodes
+and the DNNS, other hp the same as this one
+
+
+
+Test_2
+
+Data
+E288_200: 4.5, 5.5, 6.5
+E288_400: 5.5
+
+initial_lr = 0.001
+epochs = 1000 
+batch_size = 8
+
+DNNB details
+Hidden layer 1, 50 nodes, all 'relu'
+
+DNNS
+Hidden layer 1: 100 nodes
+Hidden layer 2: 100 nodes
+Hidden layer 3: 100 nodes
+Hidden layer 4: 100 nodes
+
+Not a good one
+
+
+Test_3
+I wanted to check what if we wanted to do a fit only 
+to all E288_200 Data. Used same hyperparameters as in Test_1.
+
+
+Test_4
+I want to include the s in the denominator to check.
+It seems working fine the only thing is the scale of B is so large.
+I suspect that has something to do with the 16pi^2 factor.
+
+
+Test_5
+Let's include the E288_400 data set along with E288_200 with
+Test_4 setup
+
+
+Test_6
+Let's include all E288 data sets
+Cross-sections seem good 
+but BQM, SqT are not
+
+
+Test_7
+After confirming that our formulation is the same as Ted's resuming tuning from Test_2
+Same as Test_2
+
+Test_8
+We we want to do is to modify the formalism to have 1/s with Test_4
+
+
+Test_9
+Test_8 with full E288_200 and E288_400 datasets
+Noticed that SqT becomes negative
+
+Test_10
+A trial with optimizing hp
+
+Test_11
+Re-running the original fit
+On this one modified_LR was not implemented
+
+
+Test_12
+Original with no cuts
+modified_LR is included
+
+
+Test_13
+Original with only upsilon cut
+modified_LR is included
+This seems better
+
+
+Test_14
+Test_13 with increased complexity on SqT
+
+
+Test_15
+Progressive DNN
+Implementing prog_test.py with Test_11 original fit
+
+
+Test_16
+Progressive DNN
+Implementing prog_basic.py with Test 15 (original fit)
+
+Test_17
+Same as Test_13 but un-integrated in QM
+
+Test_18
+Test_13 with E288_200
+
+Test_19
+Test_13 with E288_400
+
+Test_20
+Test_13 with (1/s) modification
+
+
+Test_21
+Only fit to data upto  QM=8.5 GeV
+
+
+Test_22
+Only E288_200 and E288_300 data with Test 13
+
+
+Test_23
+Multiply (1+ qT2/Q2) for Test_20
+
+Test_24
+Having more statistics from
+E288_200: QM = 4.5, 5.5, 6.5
+E288_400: QM = 5.5, 6.5, 7.5
+added five sets from each
+Modified the code from Test_19
+
+
+Test_25
+Same as Test_24 but with linear actv in SqT
+
+
+Test_26
+Test_24 with both cuts qT < 0.2 QM and upsilon cut 
+
+Test_27
+Modified Test_24 without those additional statistics but having SqrtS weight in the loss
+weights = w / mean_w
+
+Test_28
+Modified Test_27 having SqrtS*SqrtS weight in the loss
+weights = w / mean_w
+
+Test_29
+Modified Test_28 with weight QM
+weights = w / mean_w
+
+Test_30
+Modified Test_28 with weight qT
+weights = w / mean_w
+
+Test_31
+Modified Test_28 with weight SqrtS
+weights = w
+
+Test_32
+Modified Test_31 with weight SqrtS^2
+weights = w
+
+Test_33
+Modified Test_31 with weight QM
+weights = w
+
+Test_34
+Modified Test_31 with weight qT
+weights = w
+
+
+Test_35
+Modifying the code to implemtent prog_basic
+
+Test_36
+Test_35 Progressive DNN with both cuts
