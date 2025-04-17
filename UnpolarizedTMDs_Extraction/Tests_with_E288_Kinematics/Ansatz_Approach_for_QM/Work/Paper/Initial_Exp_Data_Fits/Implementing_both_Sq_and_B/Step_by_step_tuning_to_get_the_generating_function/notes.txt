@@ -189,3 +189,54 @@ Modifying the code to implemtent prog_basic
 
 Test_36
 Test_35 Progressive DNN with both cuts
+
+
+Test_37
+Test_36 Progressive DNN with both cuts with increased complexity on B
+
+
+Test_38
+Implementing weight on each row based on the kinematics
+This is to impose a higher weight for those six QM bins (3 from 200 and 3 from 400)
+weight = 100
+
+Test_39
+Implement Test_38 with progressive DNN from Test_35
+
+Test_40
+Same as Test_39 but Test_39 was not doing what we wanted so attempted correcting not completed
+so then tried the following with Test_35
+def pdf(pdfset, flavor, x, QQ):
+    return pdfset.xfxQ2(flavor, x, QQ)
+pay close attention if using this Test_41 for any other tests
+
+Test_41
+Same as Test_38 but more weight
+weight = 500
+
+Test_42
+Attempting to correct the code from Test_39
+Got a working version but need to check. Going to do in Test_43
+Not working
+
+Test_43
+Progressive DNN
+This is working correctly.
+weight = 500
+
+So with the weights we have
+Test 38, and Test 43
+
+
+Test_44
+Added a SqrtS in front of the cross-section as a test don't use this
+
+
+Test_45
+Test 38 with weight = 1000
+
+Test_46
+Test_43 with weight = 1000
+
+
+
