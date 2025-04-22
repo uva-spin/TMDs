@@ -238,5 +238,83 @@ Test 38 with weight = 1000
 Test_46
 Test_43 with weight = 1000
 
+Test_47
+Preparing the cross-section in the loss version
+/home/ishara/Documents/TMDs/Ansatz_Approach_for_QM/Work/Paper/Fits_with_E288_Data/With_Separate_Sq_and_BQM_models_CrossSection_in_loss
+Was able to make the code running with cross-section in the loss
+Start with weight = 1
+with both cuts
 
 
+Test_48
+Test_47 with only upsilon cut
+
+
+Test_49
+Test_46 with weight = 5000
+
+
+Test_50
+Testing_41
+
+Increase the weight --> Increase the learning rate --> epochs
+
+
+Test_51
+Apply different weights for each QM bin
+Used Test_46
+initial_lr = 0.002
+epochs_per_stage=100
+
+
+Test_52
+Test_51 with higher learning rate
+initial_lr = 0.02
+DNNB 5x256
+epochs_per_stage=300
+
+
+Test_53
+Improving Test_51
+initial_lr = 0.002 -- > 0.006
+epochs = 1000 --> 2000
+
+Test_54
+Improving Test_51
+initial_lr = 0.002 -- > 0.006
+epochs = 1000 --> 2000
+w_400_55 = 1000 --> 2000
+w_400_65 = 1000 --> 2000
+w_400_75 = 1000 --> 2000
+DNNB 3,100 --> 5, 100
+
+
+Test_55
+Test_51 with fDNN and weights = 1
+fDNN * SqT * BQM
+
+Test_56
+S(qT,xF)*BQM
+
+
+Test_57
+S(qT,x1,x2)*BQM
+Therefiore, in the PDFs contribution it should be updated to
+PDFs_with_S = fq(x1)fqbar(x2)SqT(qT,x1,x2) + fq(x2)fqbar(x1)SqT(qT,x2,x1)
+
+
+Test_58
+Test_57 with less-complexity
+DNNB: 3L, 10N
+DNNS: 3L, 10N, linear instead of softplus
+
+Test_59
+Test_57 with less-complexity
+DNNB: 3L, 10N
+DNNS: 3L, 10N, softplus
+
+
+Test_60
+Test_57 with less-complexity
+DNNB: 3L, 20N
+DNNS: 3L, 10N, softplus
