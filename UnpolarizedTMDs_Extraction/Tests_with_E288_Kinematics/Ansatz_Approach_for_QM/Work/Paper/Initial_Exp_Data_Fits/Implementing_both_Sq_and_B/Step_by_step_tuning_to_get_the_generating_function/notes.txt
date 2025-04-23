@@ -318,3 +318,39 @@ Test_60
 Test_57 with less-complexity
 DNNB: 3L, 20N
 DNNS: 3L, 10N, softplus
+
+
+Test_61
+Test_57 with less-complexity
+DNNB: 3L, 200N
+DNNS: 3L, 200N, softplus
+Batch Size 20
+
+
+Test_62
+Test_57 with less-complexity
+DNNB: 3L, 100N
+DNNS: 3L, 200N, softplus
+Batch Size 8
+
+
+Test_63
+Test_60 with less-complexity
+DNNB: 3L, 20N
+DNNS: 3L, 10N, softplus
+Batch Size 20
+
+
+Test_64
+Modified Test_60 to provide different activation functions
+DNNB: relu, tanh, elu  --> linear
+DNNS: relu, sigmoid, leaky_relu --> softplus
+did not do well
+DNNB: relu, tanh, relu  --> linear
+DNNS: relu, tanh, relu --> softplus
+
+Test_65
+Test 64 with
+DNNB: 3, 100 N
+DNNS: 3, 100
+
