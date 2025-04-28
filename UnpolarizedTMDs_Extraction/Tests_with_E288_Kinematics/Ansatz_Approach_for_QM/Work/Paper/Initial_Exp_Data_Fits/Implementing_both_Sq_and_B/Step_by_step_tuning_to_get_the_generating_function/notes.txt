@@ -352,5 +352,10 @@ DNNS: relu, tanh, relu --> softplus
 Test_65
 Test 64 with
 DNNB: 3, 100 N
-DNNS: 3, 100
+DNNS: 3, 100 N
+
+Test 66
+Test 64 with
+DNNB: 3, 200 N
+DNNS: 3, 200 N
 
