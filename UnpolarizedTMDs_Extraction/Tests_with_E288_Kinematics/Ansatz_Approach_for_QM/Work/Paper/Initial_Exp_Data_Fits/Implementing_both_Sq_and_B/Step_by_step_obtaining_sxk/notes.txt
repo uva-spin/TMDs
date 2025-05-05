@@ -1,0 +1,5 @@
+
+Here we call the trained models for Sq(qT,x1,x2) and trying to obtain two separate s(x,k) 
+one for target and one for beam: s(x1,k) and s(x2,k')
+
+1. Generate a grid of Sq(qT, x1, x2) vlues
