@@ -3,127 +3,229 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+from model import *
 
-# Constants
-eu2 = (2/3)**2
-ed2 = (-1/3)**2
-es2 = (-1/3)**2
-alpha = 1/137
-hc_factor = 3.89 * 10**8
-factor = ((4*np.pi*alpha)**2)/(9*2*np.pi)
 
-NUM_QT_VALUES = 20
-NUM_xF_VALUES = 20
-
-# Load Data
-E288_200 = pd.read_csv("/home/ishara/Documents/TMDs/Ansatz_Approach_for_QM/Work/Data_Updated/E288_200.csv")
-E288_300 = pd.read_csv("/home/ishara/Documents/TMDs/Ansatz_Approach_for_QM/Work/Data_Updated/E288_300.csv")
-E288_400 = pd.read_csv("/home/ishara/Documents/TMDs/Ansatz_Approach_for_QM/Work/Data_Updated/E288_400.csv")
-data = pd.concat([E288_200, E288_300, E288_400], ignore_index=True)
-
-# Define x2_min before reference
-x2_min = data['x2'].min()
-x2_unique = np.sort(data['x2'].unique())
-x2_value = x2_unique[0] if len(x2_unique) > 0 else x2_min
-
-qT_array = np.linspace(data['qT'].min(), data['qT'].max(), NUM_QT_VALUES)
-xF_array = np.linspace(data['xF'].min(), data['xF'].max(), NUM_xF_VALUES)
-x1_array = xF_array + x2_value
-x2_array = np.array(np.linspace(x2_value,x2_value,NUM_xF_VALUES))
-SqT_input = np.column_stack([qT_array, x1_array, x2_array])
-
-models_folder = 'Models'
-if not os.path.exists(models_folder):
-    models_folder = '../../Step_by_step_tuning_to_get_sqT/Test_68/Models'
-
-def custom_weighted_loss(y_true, y_pred, w=None):
-    y_true = tf.cast(y_true, tf.float32)
-    y_pred = tf.cast(y_pred, tf.float32)
-    
-    if w is not None:
-        w = tf.cast(w, tf.float32)
-        mean_w = tf.reduce_mean(w)
-        weights = w / mean_w
-        squared_error = tf.square(y_pred - y_true)
-        weighted_squared_error = squared_error * weights
-        return tf.reduce_mean(weighted_squared_error)
-
+def create_folders(folder_name):
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+        print(f"Folder '{folder_name}' created successfully!")
     else:
-        return tf.reduce_mean(tf.square(y_pred - y_true))
+        print(f"Folder '{folder_name}' already exists!")
+
+CSV_folder = 'csvs'
+create_folders(CSV_folder)
 
 
-class CustomWeightedLoss(tf.keras.losses.Loss):
-    def __init__(self, name="custom_weighted_loss"):
-        super().__init__(name=name)
+# Define the custom loss function from the original code
+def mse_loss(y_true, y_pred):
+    """Mean squared error loss function."""
+    return tf.reduce_mean(tf.square(y_true - y_pred))
+
+# Recreate the custom layer needed for loading models
+class TMDIntegrationLayer(tf.keras.layers.Layer):
+    def __init__(self, k_bins=10, phi_bins=10, k_lower=0.0, k_upper=10.0, **kwargs):
+        super(TMDIntegrationLayer, self).__init__(**kwargs)
+        self.k_bins = k_bins
+        self.phi_bins = phi_bins
+        self.k_lower = float(k_lower)
+        self.k_upper = float(k_upper)
+        
+        # Pre-compute k and phi values
+        self.k_values = np.linspace(self.k_lower, self.k_upper, self.k_bins, dtype=np.float32)
+        self.phi_values = np.linspace(0.0, np.pi, self.phi_bins, dtype=np.float32)
+        
+        # Calculate step sizes
+        self.dk = float(self.k_upper - self.k_lower) / float(self.k_bins - 1)
+        self.dphi = float(np.pi) / float(self.phi_bins - 1)
+        
+        # Create the neural networks
+        self.modn1 = create_nn_model('n1')
+        self.modn2 = create_nn_model('n2')
     
-    def __call__(self, y_true, y_pred, sample_weight=None):
-        return custom_weighted_loss(y_true, y_pred, sample_weight)
+    
+    def call(self, inputs):
+        qT, x1, x2 = inputs
+        
+        # Initialize the output tensor with zeros
+        batch_size = tf.shape(qT)[0]
+        result = tf.zeros((batch_size, 1), dtype=tf.float32)
+        
+        # Loop through k and phi values
+        for k_idx in range(self.k_bins):
+            k_val = self.k_values[k_idx]
+            k_factor = k_val  # For Jacobian if needed
+            
+            for phi_idx in range(self.phi_bins):
+                phi_val = self.phi_values[phi_idx]
+                
+                # Calculate kB
+                kb_tensor = tf.sqrt(qT**2 + k_val**2 - 2*qT*k_val*tf.cos(phi_val))
+                
+                # Create input tensors for the neural networks
+                n1_input = tf.concat([x1, tf.ones_like(x1) * k_val], axis=1)
+                n2_input = tf.concat([x2, kb_tensor], axis=1)
+                
+                # Get neural network outputs
+                nn1_out = self.modn1(n1_input)
+                nn2_out = self.modn2(n2_input)
+                
+                # Multiply, apply integration weights, and add to result
+                contribution = nn1_out * nn2_out * k_factor * self.dk * self.dphi
+                result += contribution
+        
+        return result
+    
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'k_bins': self.k_bins,
+            'phi_bins': self.phi_bins,
+            'k_lower': self.k_lower,
+            'k_upper': self.k_upper
+        })
+        return config
 
-
-model_files = [f for f in os.listdir(models_folder) if f.endswith('.h5')]
-models_list = [tf.keras.models.load_model(
-    os.path.join(models_folder, f), 
-    custom_objects={
-        'custom_weighted_loss': custom_weighted_loss,
-        'CustomWeightedLoss': CustomWeightedLoss,
-        'train_weighted_loss': custom_weighted_loss  # In case the model used this name
+# Function to load models with custom objects
+def load_models(models_folder='DNNmodels'):
+    model_files = [f for f in os.listdir(models_folder) if f.endswith('.h5')]
+    
+    # Define custom objects for model loading
+    custom_objects = {
+        'mse_loss': mse_loss,
+        'TMDIntegrationLayer': TMDIntegrationLayer
     }
-) for f in model_files]
+    
+    # Load all models
+    models_list = []
+    for f in model_files:
+        model_path = os.path.join(models_folder, f)
+        model = tf.keras.models.load_model(model_path, custom_objects=custom_objects)
+        models_list.append(model)
+    
+    print(f"Loaded {len(models_list)} models from '{models_folder}'.")
+    return models_list
 
-print(f"Loaded {len(models_list)} models from '{models_folder}'.")
+def main():
+    # Load the original data
+    print("Loading original data...")
+    df = pd.read_csv('results.csv').dropna(axis=0, how='all').dropna(axis=1, how='all')
+    
+    # Load all trained models
+    print("Loading trained models...")
+    models = load_models('DNNmodels')
+    
+    if not models:
+        print("No models loaded. Please check the models folder.")
+        return
+    
+    # Prepare input data for prediction
+    qT_array = df['qT'].values.reshape(-1, 1)
+    x1_array = df['x1'].values.reshape(-1, 1)
+    x2_array = df['x2'].values.reshape(-1, 1)
 
-
-all_SqT_model_preds = []
-
-
-for i in range(0, 20):    
-    if i == 0:
-        SqT_model_preds = []
+    # Get unique x1 values from the dataset (for better visualization)
+    unique_x1 = np.sort(np.unique(df['x1'].values))
+    # Create k array with the same dimension as unique_x1
+    k_values = np.linspace(0, 10, len(unique_x1))
+    # Select a few k values to plot
+    selected_k_values = [0.5, 2.0, 5.0, 8.0]
+    # Finer k array for smoother curves
+    fine_k_values = np.linspace(0, 10, 100)
+    
+    # Original SqT values and errors
+    SqT_orig = df['SqT'].values
+    SqT_err_orig = df['SqT_err'].values
+    
+    # Make predictions with all models
+    print("Making predictions with all models...")
+    SqT_predictions = []
+    n1_pred_for_x1 = []
+    
+    for i, model in enumerate(models):
+        print(f"Predicting with model {i+1}/{len(models)}...")
+        pred = model.predict([qT_array, x1_array, x2_array], verbose=0)
+        SqT_predictions.append(pred.flatten())
         
-        for model in models_list:
-            try:
-                SqT_model = model.get_layer('SqT')
-                SqT_pred = SqT_model.predict(SqT_input, verbose=0)
-                SqT_model_preds.append(SqT_pred)
-            except Exception as e:
-                print(f"Error during prediction: {e}")
+        # Extract n1 model from the loaded model's TMDIntegrationLayer
+        tmd_layer = None
+        for layer in model.layers:
+            if isinstance(layer, TMDIntegrationLayer):
+                tmd_layer = layer
+                break
         
-        all_SqT_model_preds = SqT_model_preds
+        if tmd_layer:
+            n1_model = tmd_layer.modn1
+            
+            # We want to generate an array of n1 values for each x1
+            for x1_val in x1_array:
+                n1_outputs_each_k = []
+                for k_val in fine_k_values:
+                    # Create input for n1 model: [x1, k]
+                    n1_input = np.array([[x1_val[0], k_val]])  # Extract the scalar value from x1_val
+                    n1_output = n1_model.predict(n1_input, verbose=0)[0][0]
+                    n1_outputs_each_k.append(n1_output)
+                n1_pred_for_x1.append({
+                    'model': i,
+                    'x1': x1_val[0],
+                    'k_values': fine_k_values,
+                    'n1_values': np.array(n1_outputs_each_k)
+                })
     
-    SqT_all_preds = np.array(all_SqT_model_preds)
+    # Convert to numpy array for easier calculations
+    SqT_predictions = np.array(SqT_predictions)
     
-    if len(SqT_all_preds) > 0:
-        SqT_mean = np.mean(SqT_all_preds, axis=0).flatten()
-        SqT_std = np.std(SqT_all_preds, axis=0).flatten()
-    else:
-        print("Warning: No valid predictions available.")
-        SqT_mean = np.zeros(len(SqT_input))
-        SqT_std = np.zeros(len(SqT_input))
+    # Calculate mean and standard deviation across all models for SqT
+    SqT_mean = np.mean(SqT_predictions, axis=0)
+    SqT_std = np.std(SqT_predictions, axis=0)
     
-temp_df = {
-    'qT': qT_array,
-    'x1': x1_array,
-    'x2': x2_array,
-    'SqT' : SqT_mean,
-    'SqT_err' : SqT_std
-}
+    # Save the prediction results to CSV for future reference
+    SqT_df = pd.DataFrame({
+        'x1': df['x1'],
+        'x2': df['x2'],
+        'qT': df['qT'],
+        'SqT_orig': SqT_orig,
+        'SqT_err_orig': SqT_err_orig,
+        'SqT_pred_mean': SqT_mean,
+        'SqT_pred_std': SqT_std
+    })
+    
+    SqT_df.to_csv(str(CSV_folder)+'/SqT_results.csv', index=False)
+    print("Results for SqT are saved")
+    
+    # Create and save n1 results to CSV
+    print("Processing n1 predictions...")
+    # Create a list to hold all the rows for our DataFrame
+    n1_data_rows = []
+    
+    # Flatten the nested structure into rows for the DataFrame
+    for item in n1_pred_for_x1:
+        model_idx = item['model']
+        x1_val = item['x1']
+        for k_idx, k_val in enumerate(item['k_values']):
+            n1_val = item['n1_values'][k_idx]
+            n1_data_rows.append({
+                'model': model_idx,
+                'x1': x1_val,
+                'k': k_val,
+                'n1': n1_val
+            })
+    
+    # Create the DataFrame and save to CSV
+    n1_df = pd.DataFrame(n1_data_rows)
+    # Save to CSV
+    n1_df.to_csv(str(CSV_folder)+'/n1_results.csv', index=False)
+    print("Results for n1 are saved")
+    
+    # # Optional: Calculate and print some statistics
+    # mean_rel_error = np.mean(np.abs(SqT_mean - SqT_orig) / SqT_orig) * 100
+    # print(f"Mean relative error: {mean_rel_error:.2f}%")
+    # # Calculate chi-squared
+    # chi2 = np.sum(((SqT_mean - SqT_orig) / SqT_err_orig) ** 2)
+    # reduced_chi2 = chi2 / len(SqT_orig)
+    # print(f"Chi-squared: {chi2:.2f}")
+    # print(f"Reduced chi-squared: {reduced_chi2:.2f}")
 
-results_csv_df = pd.DataFrame(temp_df)
-results_csv_df.to_csv('results.csv')
 
-plt.figure(1,figsize=(10, 6))
-plt.errorbar(x1_array, SqT_mean, yerr=SqT_std, fmt='o', alpha=0.5)
-plt.title('SqT Predictions with Uncertainty')
-plt.xlabel('$x_1')
-plt.ylabel('SqT')
-plt.tight_layout()
-plt.savefig('SqT_vs_x1_predictions.png')
-
-
-plt.figure(2,figsize=(10, 6))
-plt.errorbar(qT_array, SqT_mean, yerr=SqT_std, fmt='o', alpha=0.5)
-plt.title('SqT Predictions with Uncertainty')
-plt.xlabel('$q_T$')
-plt.ylabel('SqT')
-plt.tight_layout()
-plt.savefig('SqT_vs_qT_predictions.png')
+if __name__ == "__main__":
+    main()
