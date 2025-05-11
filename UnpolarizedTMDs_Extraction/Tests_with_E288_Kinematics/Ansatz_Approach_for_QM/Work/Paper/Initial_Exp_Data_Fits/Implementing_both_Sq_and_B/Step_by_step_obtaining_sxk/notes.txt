@@ -2,4 +2,24 @@
 Here we call the trained models for Sq(qT,x1,x2) and trying to obtain two separate s(x,k) 
 one for target and one for beam: s(x1,k) and s(x2,k')
 
-1. Generate a grid of Sq(qT, x1, x2) vlues
+Test_1:
+Based on the trained models to the cross-section data, we generate the SqT values for a grid with
+Fixed x2 and vary x1 and qT from the values in data files.
+Then, Trained the sub-models n1 and n2 for target/beam
+Then, generated csv files for SqT to compare with the trained data and a grid for n1
+Then, generated plots
+
+
+Test_2
+Hidden_Layers = 3
+Nodes_per_HL = 100
+NUM_REPLICAS = 50
+
+Test_3
+What we want to do Here:
+1. Fix qT to let's say 0.5.
+2. Sample over x1 and x2 where x1,x2 = {0.1-0.3}
+3. Plot n1(x1,k) and n2(x2,k')
+
+Test_4
+Same as Test_3
