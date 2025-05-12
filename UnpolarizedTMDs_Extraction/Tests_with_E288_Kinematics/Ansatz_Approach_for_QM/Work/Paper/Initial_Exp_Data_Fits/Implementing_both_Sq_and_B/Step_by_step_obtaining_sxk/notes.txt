@@ -23,3 +23,54 @@ What we want to do Here:
 
 Test_4
 Same as Test_3
+
+Test_5
+Dustin's code with 1000 epochs included timing
+
+Test_6
+Test_5 with 2000 epochs
+
+Test_7
+Test_6 with
+def make_dnn(name):
+    inputs = tf.keras.Input(shape=(2,), name=f"{name}_input")  # [x, k]
+    x = tf.keras.layers.Dense(64, activation='tanh')(inputs)
+    x = tf.keras.layers.Dense(64, activation='tanh')(x)
+    outputs = tf.keras.layers.Dense(1, activation='softplus')(x)
+    return tf.keras.Model(inputs, outputs, name=name)
+with 500 points
+Duration at Epoch 900 --> 0:39:43
+Epoch 950, Loss: nan
+Duration at Epoch 950 --> 0:41:58
+
+So reduced to 300 points
+
+
+Test_8
+Test_7 with 4000 epochs
+
+Test_9
+# Define DNNs NN_a(x_a, k) and NN_b(x_b, k)
+def make_dnn(name):
+    inputs = tf.keras.Input(shape=(2,), name=f"{name}_input")  # [x, k]
+    x = tf.keras.layers.Dense(64, activation='relu6')(inputs)
+    x = tf.keras.layers.Dense(64, activation='tanh')(x)
+    outputs = tf.keras.layers.Dense(1, activation='softplus')(x)
+    return tf.keras.Model(inputs, outputs, name=name)
+4000 epochs
+
+Test_10 
+Implemented a predicting layer for S_qT_prediction
+Used 300 data points and 4000 epochs and it took about 8 mins  and 30 seconds, whereas
+Test_9 took about 1 hr 45 mins
+
+Test_11
+Test_10 with 1000 data points and 10000 epochs (should be around 20 mins)
+qT range increased to 5 GeV
+1000 data points crashed: not enough memory so reduced to 500 for training
+This is the best model so far
+
+
+
+
+
