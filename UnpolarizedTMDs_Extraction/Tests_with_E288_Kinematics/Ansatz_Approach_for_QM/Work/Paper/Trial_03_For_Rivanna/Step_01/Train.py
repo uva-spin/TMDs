@@ -8,8 +8,26 @@ from matplotlib.backends.backend_pdf import PdfPages
 import random
 from pathlib import Path
 import gc
+import sys
 
 Num_Replicas =  1000
+
+scratch_path = '/scratch/cee9hc/Unpolarized_TMDs/with_E288_E605/Trial_01/'
+
+models_folder = Path( scratch_path + 'Models')
+loss_plot_folder = Path( scratch_path + 'Loss_Plots')
+replica_data_folder = Path( scratch_path + 'Replica_Data')
+data_folder = Path( scratch_path + 'Data_with_weights')
+
+def create_folders(folder_name):
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+        print(f"Folder '{folder_name}' created successfully!")
+    else:
+        print(f"Folder '{folder_name}' already exists!")
+
+for folder in [models_folder, loss_plot_folder, replica_data_folder, data_folder]:
+    create_folders(folder)
 
 
 # Constants
@@ -209,20 +227,6 @@ modify_LR = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.9,patie
 
 
 
-# Create necessary folders using Path for better cross-platform compatibility
-def create_folders(folder_name):
-    folder_path = Path(folder_name)
-    if not folder_path.exists():
-        folder_path.mkdir(parents=True, exist_ok=True)
-        print(f"Folder '{folder_name}' created successfully!")
-
-models_folder = Path('Models')
-loss_plot_folder = Path('Loss_Plots')
-replica_data_folder = Path('Replica_Data')
-data_folder = Path('Data_with_weights')
-
-for folder in [models_folder, loss_plot_folder, replica_data_folder, data_folder]:
-    create_folders(folder)
 
 # Function to handle data paths and loading
 def load_data(base_path, file_names):
@@ -285,8 +289,8 @@ E288_400 = add_weight_column(E288_400_initial, 400,'y')
 E605 = add_weight_column(E605_initial, 800,'n')
 
 
-data_folder = 'Data_with_weights'
-create_folders(data_folder)
+#data_folder = 'Data_with_weights'
+#create_folders(data_folder)
 E288_200.to_csv(str(data_folder)+'/'+'E288_200_with_weights.csv')
 E288_300.to_csv(str(data_folder)+'/'+'E288_300_with_weights.csv')
 E288_400.to_csv(str(data_folder)+'/'+'E288_400_with_weights.csv')
@@ -602,7 +606,8 @@ def train_progressively(model, X_train, y_train, X_val, y_val, w_train, w_val,
 
 
 # Enhanced replica model training function
-def replica_model(i):
+def replica_model():
+    i = sys.argv[1]
     print(f"\n=== Training Replica Model {i} ===")
     
     # Generate replica data
@@ -693,8 +698,12 @@ def replica_model(i):
     plt.savefig(loss_plot_path)
     print(f"Loss plot for Progressive Model {i} saved successfully at {loss_plot_path}!")
 
+
+replica_model()
+gc.collect()
+tf.keras.backend.clear_session()
 # Train multiple replicas
-for i in range(Num_Replicas):
-    replica_model(i)
-    gc.collect()
-    tf.keras.backend.clear_session()
+#for i in range(Num_Replicas):
+#    replica_model(i)
+#    gc.collect()
+#    tf.keras.backend.clear_session()
