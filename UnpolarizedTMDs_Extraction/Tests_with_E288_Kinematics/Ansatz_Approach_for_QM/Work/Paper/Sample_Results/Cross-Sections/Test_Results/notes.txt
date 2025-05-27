@@ -1,0 +1,190 @@
+
+Trial 1
+
+Using only E288 data sets but running for 1000 replicas
+It was killed at 145 replica
+
+
+
+From the discussion on 05/13/2025
+1. Increasing the data points on S (just to increase statistics to get more informattion)
+2. Redoing the same with the S_model closer to the max, and min from the cross-section model
+3. Include E605, E772 data sets to this E288
+
+Conditions:
+1. No Upsilon kinematic regions
+2. We do not use any other stringent cuts as other work
+
+
+What we are going to present
+1. Cross-secions for each dataset separately
+2. TMDq(x,k,Q)_a = nna(x,k)sqrt(BQM)fq(x,Q2) plots for SU(3)
+3. SqT(qT,xa,xb), B(QM)
+
+
+05/14/2025
+1. Updated the code to generate min, max, avg models
+2.
+
+
+
+05/15/2025
+1. Step_01_Fit_to_Cross-Sections
+2. Step_02_Finding_Models_within_2Sigma
+3. Step_03_Extracting_NaNb
+   Here I called "generate_training_data" function in the loop of replicas
+   so the qT, x1, x2 grid for each replica is different. We may come back to this
+   step later to use the same grid 
+
+05/16/2025
+4. Step 04 Generated the grid for nna and NN_b
+Noticed that the errors are large
+One possibility would be the note that I mentioned in (3). So created another file 
+which used the same grid of x1, x2, qT and training
+Using only 100 epochs to see the results faster (rather than 10000)
+
+Another possibility would be the batches: need to test this
+
+Step_03_Fitting SqT Step_03_Extracting_NaNb
+n_samples 2000 with n_epochs 10000 did not work, was showing nan as loss.
+
+def make_dnn(name):
+    inputs = tf.keras.Input(shape=(2,), name=f"{name}_input")
+    x = tf.keras.layers.Dense(64, activation='relu6')(inputs)
+    x = tf.keras.layers.Dense(64, activation='tanh')(x)
+    x = tf.keras.layers.Dense(64, activation='relu6')(x)
+    outputs = tf.keras.layers.Dense(1, activation='softplus')(x)
+    return tf.keras.Model(inputs, outputs, name=name)
+
+Implemented training and validation losses with plots
+
+Notice Model 3 gives nan: deleted the trained models from nna, nnb, and SqT models
+Reduced batch size from 256 to 32, and seems its pretty good
+
+
+
+Trial_02 
+Only with E288 data sets
+
+The key part is np.all((pred >= lower_bound) & (pred <= upper_bound)). 
+This checks if ALL predictions from a given model fall within the 1-sigma bounds 
+(between mean-std and mean+std) for EVERY data point.
+If even a single prediction from a model falls outside the bounds for any data point,
+ the entire model is rejected.
+ 
+ 
+Trial_04
+
+
+# Define Progressive DNNB
+def DNNB(name):
+    # Using different activations for each layer
+    model, _ = build_progressive_model(
+        input_shape=(1,),
+        depth=3,
+        width=100,
+        use_residual=False,
+        activations=['gelu', 'relu', 'gelu'],  # Different activation for each layer
+        output_activation='linear',
+        name=name
+    )
+    return model
+
+# Define Progressive DNNS
+def DNNS(name):
+    # Using different activations for each layer
+    model, _ = build_progressive_model(
+        input_shape=(3,),
+        depth=3,
+        width=100,
+        use_residual=False,
+        initializer_range=0.1,
+        activations=['gelu', 'relu', 'gelu'],  # Different activation for each layer
+        output_activation='softplus',
+        name=name
+    )
+    return model
+
+
+
+Trial 05
+Same as Trial 04 but
+
+def add_weight_column(dataframe, beamenergy, user_choice):
+
+    w_200_45 = 1
+    w_200_55 = 1
+    w_200_65 = 1
+    w_200_75 = 1
+    w_200_85 = 1
+    ######
+    w_300_115 = 1
+    w_400_55 = 1
+    w_400_65 = 1
+    w_400_75 = 1
+    w_400_125 = 1
+    w_400_135 = 1
+
+    w_605_75 = 1
+    w_605_85 = 1
+    w_605_992 = 1
+    w_605_11 = 1
+    w_605_125 = 1
+    
+    
+Trial 06
+
+Same as Trial 04
+Checked all data points with the sources
+Identified a couple of data points that was set to 0.000001
+1) E288_300 QM=4.5, qT=2.9 was -0.139
+2) E288_400 QM=6.5, qT=4.5 was -0.0015
+
+On E605, I noticed that the QM=11 was ignored from the upsilon cut need to fix this
+# Define Progressive DNNB
+def DNNB(name):
+    # Using different activations for each layer
+    model, _ = build_progressive_model(
+        input_shape=(1,),
+        depth=3,
+        width=100,
+        use_residual=False,
+        activations=['gelu', 'gelu', 'gelu'],  # Different activation for each layer
+        output_activation='linear',
+        name=name
+    )
+    return model
+
+# Define Progressive DNNS
+def DNNS(name):
+    # Using different activations for each layer
+    model, _ = build_progressive_model(
+        input_shape=(3,),
+        depth=3,
+        width=100,
+        use_residual=False,
+        initializer_range=0.1,
+        activations=['gelu', 'gelu', 'gelu'],  # Different activation for each layer
+        output_activation='softplus',
+        name=name
+    )
+    return model
+    
+    
+
+Trial 07
+
+Same as Trial 06 but implementing early stopping based on cross over
+
+Trial 08
+Set all the weights to 1
+
+Trial 09
+Set the weights 300 for
+E288 300 last one
+E288 400 last 3
+
+
+
+
+ 
